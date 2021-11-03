@@ -10,6 +10,7 @@ const getAllTasks = async () => {
 
 const insertTask = async ({ name, status }) => {
   if (!name || !status) return ({ status: 400, data: 'Entradas inválidas. Tente novamente.' });
+  console.log('antes de inserir');
 
   const task = await model.insertTask(name, status);
 

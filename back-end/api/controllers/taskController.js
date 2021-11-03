@@ -1,5 +1,6 @@
 const service = require('../services/taskService');
 
+
 const getAllTasks = async (_req, res) => {
   const { status, data } = await service.getAllTasks();
 
@@ -7,7 +8,6 @@ const getAllTasks = async (_req, res) => {
 };
 
 const insertTask = async (req, res) => {
-  console.log('🚀 ~ file: taskController.js ~ line 11 ~ insertTask ~ req.body', req.body);
   const { status, data } = await service.insertTask(req.body);
 
   return res.status(status).json({ data });

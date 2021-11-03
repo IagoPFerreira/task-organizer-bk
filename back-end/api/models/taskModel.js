@@ -5,7 +5,7 @@ const coll = 'tasks';
 
 const getAllTasks = async () => {
   const tasks = await connection()
-    .then((db) => db.collection(coll).find().toArray());
+  .then((db) => db.collection(coll).find().toArray());
 
   if (tasks.length === 0) return null;
 
@@ -13,16 +13,15 @@ const getAllTasks = async () => {
 };
 
 const insertTask = async (name, status) => {
-  // const date = new Date().toLocaleDateString('br');
+  const date = new Date().toLocaleDateString('br');
 
-  const task = await connection()
+  await connection()
     .then((db) => db.collection(coll).insertOne({
-      name, status, taskId: new ObjectId(),
+      name, status, date
     }))
-    .then((result) => ({ ...result }));
+    .then((result) => ({ ...result.ops[0] }));
 
   const tasks = await getAllTasks();
-  console.log('🚀 ~ file: taskModel.js ~ line 17 ~ insertTask ~ task', tasks);
 
   return tasks;
 };

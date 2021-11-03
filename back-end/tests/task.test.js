@@ -54,7 +54,7 @@ describe('GET /tarefas', () => {
         date: '03/11/2021',
       });
 
-      response = await chai.request(server).get('/tarefas')
+      response = await chai.request(server).get('/tarefas');
     });
 
     after(async () => {
@@ -89,79 +89,123 @@ describe('GET /tarefas', () => {
   });
 });
 
-// describe('POST /tarefas', () => {
-//   let db;
+describe('POST /tarefas', () => {
+  let db;
 
-//   before(async () => {
-//     const connectionMock = await mock();
+  before(async () => {
+    const connectionMock = await mock();
 
-//     db = connectionMock.db('TaskOrganizer');
+    db = connectionMock.db('TaskOrganizer');
 
-//     sinon.stub(MongoClient, 'connect').resolves(connectionMock);
-//   });
+    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+  });
 
-//   after(async () => {
-//     MongoClient.connect.restore();
-//   });
+  after(async () => {
+    MongoClient.connect.restore();
+  });
 
-//   describe('Quando não são passadas algumas informações', async () => {
-//     describe('Quando não é passado o "name"', () => {
-//       let response = {};
+  describe('Quando não são passadas algumas informações', async () => {
+    describe('Quando não é passado o "name"', () => {
+      let response = {};
 
-//       before(async () => {
-//         response = await chai.request(server).post('/tarefas').send({
-//           status: 'Em andamento',
-//         });
-//       });
+      before(async () => {
+        response = await chai.request(server).post('/tarefas').send({
+          status: 'Em andamento',
+        });
+      });
 
-//       it('retorna o código de status 400', () => {
-//         expect(response).to.have.status(400);
-//       });
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
 
-//       it('retorna um objeto', () => {
-//         expect(response).to.be.a('object');
-//       });
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
 
-//       it('o objeto possui a propriedade "data"', () => {
-//         expect(response.body).to.have.property('data');
-//       });
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
 
-//       it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
-//         expect(response.body.data).to.be.equal(
-//           'Entradas inválidas. Tente novamente.'
-//         );
-//       });
-//     });
+      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+        expect(response.body.data).to.be.equal(
+          'Entradas inválidas. Tente novamente.'
+        );
+      });
+    });
 
-//     describe('Quando não é passado o "status"', () => {
-//       let response = {};
+    describe('Quando não é passado o "status"', () => {
+      let response = {};
 
-//       before(async () => {
-//         response = await chai.request(server).post('/tarefas').send({
-//           name: 'Criar os testes da rota "/tarefas"',
-//         });
-//       });
+      before(async () => {
+        response = await chai.request(server).post('/tarefas').send({
+          name: 'Criar os testes da rota "/tarefas"',
+        });
+      });
 
-//       it('retorna o código de status 400', () => {
-//         expect(response).to.have.status(400);
-//       });
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
 
-//       it('retorna um objeto', () => {
-//         expect(response).to.be.a('object');
-//       });
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
 
-//       it('o objeto possui a propriedade "data"', () => {
-//         expect(response.body).to.have.property('data');
-//       });
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
 
-//       it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
-//         expect(response.body.data).to.be.equal(
-//           'Entradas inválidas. Tente novamente.'
-//         );
-//       });
-//     });
-//   });
-// });
+      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+        expect(response.body.data).to.be.equal(
+          'Entradas inválidas. Tente novamente.'
+        );
+      });
+    });
+  });
+
+  describe('Quando todas as informações são passadas', async () => {
+    let response = {};
+
+    before(async () => {
+      response = await chai.request(server).post('/tarefas').send({
+        name: 'Criar os testes da rota "/tarefas"',
+        status: 'Em andamento',
+        date: '03/11/2021',
+      });
+    });
+
+    after(async () => {
+      const { _id } = response.body.data
+      db.collection('tasks').deleteMany({
+        name: 'Criar os testes da rota "/tarefas"',
+        status: 'Em andamento',
+        _id,
+      });
+    });
+
+    it('retorna o código de status 201', () => {
+      expect(response).to.have.status(201);
+    });
+
+    it('retorna um objeto', () => {
+      expect(response).to.be.a('object');
+    });
+
+    it('o objeto possui a propriedade "data"', () => {
+      expect(response.body).to.have.property('data');
+    });
+
+    it('a propriedade "data" é um object', () => {
+      expect(response.body.data).to.be.a('object');
+    });
+
+    it('a propriedade "data" ter as propriedades da tarefa', () => {
+      expect(response.body.data).to.have.property('name');
+      expect(response.body.data).to.have.property('status');
+      expect(response.body.data).to.have.property('date');
+      expect(response.body.data).to.have.property('_id');
+    });
+  });
+});
 
 // describe('PUT /tarefas', () => {
 //   let db;
@@ -178,22 +222,49 @@ describe('GET /tarefas', () => {
 //     MongoClient.connect.restore();
 //   });
 
+//   // before(async () => {
+//   //   response = await chai.request(server).post('/tarefas').send({
+//   //     name: 'Criar os testes da rota "/tarefas"',
+//   //     status: 'Em andamento',
+//   //     date: '03/11/2021',
+//   //   });
+//   // });
+
+//   // after(async () => {
+//   //   db.collection('tasks').deleteMany({
+//   //     name: 'Criar os testes da rota "/tarefas"',
+//   //     status: 'Em andamento',
+//   //   });
+//   // });
+
 //   describe('Quando não são passadas algumas informações', async () => {
+//     let task;
+//     before(async () => {
+//       task = await chai.request(server).post('/tarefas').send({
+//         name: 'Criar os testes da rota "/tarefas"',
+//         status: 'Pendente',
+//         date: '03/11/2021',
+//       });
+//     });
+
+//     after(async () => {
+//       const { _id } = task.body.data;
+//       db.collection('tasks').deleteMany({
+//         name: 'Criar os testes da rota "/tarefas"',
+//         status: 'Pendente',
+//         _id,
+//       });
+//     });
+
 //     describe('Quando não é passado o "name"', () => {
 //       let response = {};
 
 //       before(async () => {
-//         response = await chai.request(server).post('/tarefas').send({
-//           name: 'Criar os testes da rota "/tarefas"',
-//           status: 'Em andamento',
+//         const { _id } = task.body.data;
+//         response = await chai.request(server).put('/tarefas').send({
+//           status: 'Pendente',
 //           date: '03/11/2021',
-//         });
-//       });
-  
-//       after(async () => {
-//         db.collection('tasks').deleteMany({
-//           name: 'Criar os testes da rota "/tarefas"',
-//           status: 'Em andamento',
+//           _id,
 //         });
 //       });
 
@@ -220,8 +291,41 @@ describe('GET /tarefas', () => {
 //       let response = {};
 
 //       before(async () => {
-//         response = await chai.request(server).post('/tarefas').send({
+//         const { _id } = task.body.data;
+//         response = await chai.request(server).put('/tarefas').send({
 //           name: 'Criar os testes da rota "/tarefas"',
+//           date: '03/11/2021',
+//           _id,
+//         });
+//       });
+
+//       it('retorna o código de status 400', () => {
+//         expect(response).to.have.status(400);
+//       });
+
+//       it('retorna um objeto', () => {
+//         expect(response).to.be.a('object');
+//       });
+
+//       it('o objeto possui a propriedade "data"', () => {
+//         expect(response.body).to.have.property('data');
+//       });
+
+//       it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+//         expect(response.body.data).to.be.equal(
+//           'Entradas inválidas. Tente novamente.'
+//         );
+//       });
+//     });
+
+//     describe('Quando não é passado o "_id"', () => {
+//       let response = {};
+
+//       before(async () => {
+//         response = await chai.request(server).put('/tarefas').send({
+//           name: 'Criar os testes da rota "/tarefas"',
+//           status: 'Pendente',
+//           date: '03/11/2021',
 //         });
 //       });
 

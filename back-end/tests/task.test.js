@@ -9,30 +9,24 @@ chai.use(chaiHttp);
 
 const server = require("../api/app/app");
 
-// const {
-//   StatusCodes: { CREATED, BAD_REQUEST },
-// } = require("http-status-codes");
+describe("GET /", () => {
+  before(async () => {
+    const connectionMock = await mock();;
 
-describe("1 - Using the endPoint /users", () => {
-  describe("When a new user is created", async () => {
+    sinon.stub(MongoClient, "connect").resolves(connectionMock);
+  });
+  
+  after(async () => {
+    MongoClient.connect.restore();
+  });
+
+  describe('Quando não existe nenhuma tarefa cadastrada', async () => {
     let response = {};
 
     before(async () => {
-      const connectionMock = await mock();;
-
-      sinon.stub(MongoClient, "connect").resolves(connectionMock);
-      // response = await chai.request(server).post("/users").send({
-      //   name: "Silvinha Gianattasio",
-      //   email: "silvinha@trybe.com",
-      //   password: "123456",
-      // });
       response = await chai.request(server).get('/');
-    });
+    })
     
-    after(async () => {
-      MongoClient.connect.restore();
-    });
-
 
     it('retorna o código de status 204', () => {
       expect(response).to.have.status(204);
@@ -42,19 +36,8 @@ describe("1 - Using the endPoint /users", () => {
       expect(response).to.be.a('object');
     });
 
-    // it('returns Status HTTP 201 - "Created"', () => {
-    //   expect(response).to.have.status(201);
-    // });
-
-    // it("return an Object", () => {
-    //   expect(response.body).to.be.a("object");
-    // });
-
-    // it('with a "message" property', () => {
-    //   expect(response.body).to.have.property("message");
-    // });
-    // it('and the message is: "Novo Usuário Cadastrado"', () => {
-    //   expect(response.body.message).to.be.equal("Novo Usuário Cadastrado");
-    // });
+    it('o objeto não possui a propriedade "data"', () => {
+      expect(response).not.to.have.property('data');
+    });
   });
 });

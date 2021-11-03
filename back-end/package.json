@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./api/app/app.js",
-    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit"
+    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
+    "test:watch": "mocha ./tests/**/*$NAME*.{test,spec}.js --watch --recursive --exit"
   },
   "keywords": [],
   "author": "",

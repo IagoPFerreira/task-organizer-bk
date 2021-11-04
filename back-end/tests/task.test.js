@@ -26,67 +26,77 @@ describe('GET /tarefas', () => {
     MongoClient.connect.restore();
   });
 
-  describe('Quando não existe nenhuma tarefa cadastrada', async () => {
-    let response = {};
+  describe('Casos de falha', () => {
+    describe('Quando não existe nenhuma tarefa cadastrada', async () => {
+      let response = {};
 
-    before(async () => {
-      response = await chai.request(server).get('/tarefas');
-    });
-
-    it('retorna o código de status 204', () => {
-      expect(response).to.have.status(204);
-    });
-
-    it('retorna um objeto', () => {
-      expect(response).to.be.a('object');
-    });
-
-    it('o objeto não possui a propriedade "data"', () => {
-      expect(response).not.to.have.property('data');
-    });
-  });
-
-  describe('Quando existem tarefas cadastradas', async () => {
-    let response = {};
-
-    before(async () => {
-      await chai.request(server).post('/tarefas').send({
-        name: 'Criar os testes da rota "/tarefas"',
-        status: 'Em andamento',
-        date: '03/11/2021',
+      before(async () => {
+        response = await chai.request(server).get('/tarefas');
       });
 
-      response = await chai.request(server).get('/tarefas');
-    });
+      it('retorna o código de status 404', () => {
+        expect(response).to.have.status(404);
+      });
 
-    after(async () => {
-      db.collection('tasks').deleteMany({
-        name: 'Criar os testes da rota "/tarefas"',
-        status: 'Em andamento',
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" possui o texto "Não existe tarefas cadastradas"', () => {
+        expect(response.body.data).to.be.equal(
+          'Não existe tarefas cadastradas'
+        );
       });
     });
+  });  
 
-    it('retorna o código de status 200', () => {
-      expect(response).to.have.status(200);
-    });
+  describe('Casos de sucesso', () => {
+    describe('Quando existem tarefas cadastradas', async () => {
+      let response = {};
 
-    it('retorna um objeto', () => {
-      expect(response).to.be.a('object');
-    });
+      before(async () => {
+        await chai.request(server).post('/tarefas').send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Em andamento',
+          date: '03/11/2021',
+        });
 
-    it('o objeto possui a propriedade "data"', () => {
-      expect(response.body).to.have.property('data');
-    });
+        response = await chai.request(server).get('/tarefas');
+      });
 
-    it('a propriedade "data" é um array', () => {
-      expect(response.body.data).to.be.a('array');
-    });
+      after(async () => {
+        db.collection('tasks').deleteMany({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Em andamento',
+        });
+      });
 
-    it('a propriedade "data" ter as propriedades da tarefa', () => {
-      expect(response.body.data[0]).to.have.property('name');
-      expect(response.body.data[0]).to.have.property('status');
-      expect(response.body.data[0]).to.have.property('date');
-      expect(response.body.data[0]).to.have.property('_id');
+      it('retorna o código de status 200', () => {
+        expect(response).to.have.status(200);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" é um array', () => {
+        expect(response.body.data).to.be.a('array');
+      });
+
+      it('a propriedade "data" ter as propriedades da tarefa', () => {
+        expect(response.body.data[0]).to.have.property('name');
+        expect(response.body.data[0]).to.have.property('status');
+        expect(response.body.data[0]).to.have.property('date');
+        expect(response.body.data[0]).to.have.property('_id');
+      });
     });
   });
 });
@@ -105,7 +115,7 @@ describe('POST /tarefas', () => {
   after(async () => {
     MongoClient.connect.restore();
   });
-  describe('Quando não são passadas algumas informações', async () => {
+  describe('Casos de falha', async () => {
     describe('Quando não é passado o "name"', () => {
       let response = {};
 
@@ -163,49 +173,51 @@ describe('POST /tarefas', () => {
     });
   });
 
-  describe('Quando todas as informações são passadas', async () => {
-    let response = {};
+  describe('Casos de sucesso', () => {
+    describe('Quando todas as informações são passadas', async () => {
+      let response = {};
 
-    before(async () => {
-      response = await chai.request(server).post('/tarefas').send({
-        name: 'Criar os testes da rota "/tarefas"',
-        status: 'Em andamento',
-        date: '03/11/2021',
+      before(async () => {
+        response = await chai.request(server).post('/tarefas').send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Em andamento',
+          date: '03/11/2021',
+        });
+
+        id = response.body.data['_id'];
       });
 
-      id = response.body.data['_id'];
-    });
+      //     after(async () => {
+      //       const { _id } = response.body.data;
+      //       db.collection('tasks').deleteMany({
+      //         name: 'Criar os testes da rota "/tarefas"',
+      //         status: 'Em andamento',
+      //         _id,
+      //       });
+      //     });
 
-    //     after(async () => {
-    //       const { _id } = response.body.data;
-    //       db.collection('tasks').deleteMany({
-    //         name: 'Criar os testes da rota "/tarefas"',
-    //         status: 'Em andamento',
-    //         _id,
-    //       });
-    //     });
+      it('retorna o código de status 201', () => {
+        expect(response).to.have.status(201);
+      });
 
-    it('retorna o código de status 201', () => {
-      expect(response).to.have.status(201);
-    });
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
 
-    it('retorna um objeto', () => {
-      expect(response).to.be.a('object');
-    });
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
 
-    it('o objeto possui a propriedade "data"', () => {
-      expect(response.body).to.have.property('data');
-    });
+      it('a propriedade "data" é um object', () => {
+        expect(response.body.data).to.be.a('object');
+      });
 
-    it('a propriedade "data" é um object', () => {
-      expect(response.body.data).to.be.a('object');
-    });
-
-    it('a propriedade "data" ter as propriedades da tarefa', () => {
-      expect(response.body.data).to.have.property('name');
-      expect(response.body.data).to.have.property('status');
-      expect(response.body.data).to.have.property('date');
-      expect(response.body.data).to.have.property('_id');
+      it('a propriedade "data" ter as propriedades da tarefa', () => {
+        expect(response.body.data).to.have.property('name');
+        expect(response.body.data).to.have.property('status');
+        expect(response.body.data).to.have.property('date');
+        expect(response.body.data).to.have.property('_id');
+      });
     });
   });
 });
@@ -337,7 +349,7 @@ describe('PUT /tarefas', () => {
     });
   });
 
-  describe('Caso de sucesso', async () => {
+  describe('Casos de sucesso', async () => {
     // let response;
     // before(async () => {
     //   response = await chai.request(server)
@@ -403,5 +415,3 @@ describe('PUT /tarefas', () => {
     });
   });
 });
-
-describe('DELETE /tarefas', () => {});

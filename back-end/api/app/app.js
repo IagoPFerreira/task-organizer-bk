@@ -10,10 +10,11 @@ app.use(cors());
 
 app.route('/tarefas')
   .get(taskController.getAllTasks)
-  .post(taskController.insertTask);
+  .post(taskController.insertTask)
+  .put(taskController.updateTask);
 
 const PORT = 8080;
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}`));
 
-module.exports = app
+module.exports = app;

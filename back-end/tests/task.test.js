@@ -101,6 +101,97 @@ describe('GET /tarefas', () => {
   });
 });
 
+describe('GET /tarefas/:id', () => {
+  let db;
+
+  before(async () => {
+    const connectionMock = await mock();
+
+    db = connectionMock.db('TaskOrganizer');
+
+    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+  });
+
+  after(async () => {
+    MongoClient.connect.restore();
+  });
+
+  describe('Casos de falha', () => {
+    describe('Quando a tarefa não está cadastrada', async () => {
+      let response = {};
+
+      before(async () => {
+        response = await chai.request(server).get('/tarefas/6183c3fd9d40282433fde788');
+      });
+
+      it('retorna o código de status 404', () => {
+        expect(response).to.have.status(404);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" possui o texto "Tarefa não encontrada."', () => {
+        expect(response.body.data).to.be.equal(
+          'Tarefa não encontrada.'
+        );
+      });
+    });
+  });  
+
+  describe('Casos de sucesso', () => {
+    describe('Quando a tarefa está cadastrada', async () => {
+      let response = {};
+
+      before(async () => {
+        const {body: { data: { _id } } } = await chai.request(server).post('/tarefas').send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Em andamento',
+          date: '03/11/2021',
+        });
+
+        response = await chai.request(server).get(`/tarefas/${_id}`);
+      });
+
+      after(async () => {
+        db.collection('tasks').deleteMany({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Em andamento',
+          _id: id,
+        });
+      });
+
+      it('retorna o código de status 200', () => {
+        expect(response).to.have.status(200);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" é um objeto', () => {
+        expect(response.body.data).to.be.a('object');
+      });
+
+      it('a propriedade "data" ter as propriedades da tarefa', () => {
+        expect(response.body.data).to.have.property('name');
+        expect(response.body.data).to.have.property('status');
+        expect(response.body.data).to.have.property('date');
+        expect(response.body.data).to.have.property('_id');
+      });
+    });
+  });
+});
+
 describe('POST /tarefas', () => {
   let db;
 

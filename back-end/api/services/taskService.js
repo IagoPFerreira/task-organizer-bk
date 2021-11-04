@@ -45,6 +45,8 @@ const updateTask = async (id, {
 };
 
 const deleteTask = async (id) => {
+  if (!id) return ({ status: 400, data: 'Entradas inválidas. Tente novamente.' });
+
   const task = await model.deleteTask(id);
 
   if (!task) return ({ status: 404, data: 'Tarefa não encontrada.' });

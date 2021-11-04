@@ -11,10 +11,11 @@ app.use(cors());
 app.route('/tarefas')
   .get(taskController.getAllTasks)
   .post(taskController.insertTask)
-  .put(taskController.updateTask)
-  .delete(taskController.deleteTask);
+  .put(taskController.updateTask);
 
-app.get('/tarefas/:id', taskController.getTaskById);
+app.route('/tarefas/:id')
+  .get(taskController.getTaskById)
+  .delete(taskController.deleteTask);
 
 const PORT = 8080;
 

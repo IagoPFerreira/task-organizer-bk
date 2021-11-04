@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const taskController = require('../controllers/taskController');
+const userController = require('../controllers/userController');
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.route('/tarefas')
 app.route('/tarefas/:id')
   .get(taskController.getTaskById)
   .delete(taskController.deleteTask);
+
+app.route('/users')
+  .post(userController.createUser);
 
 const PORT = 8080;
 

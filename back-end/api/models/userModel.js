@@ -27,7 +27,19 @@ const existingEmail = async (email) => {
   return true;
 };
 
+const checkLogin = async (email, password) => {
+  const checkingUser = await connection()
+    .then((db) => db.collection(coll).findOne({ email, password }));
+
+  if (!checkingUser) return null;
+
+  const { password: _, ...userWithoutPassword } = checkingUser;
+  const { name, _id } = userWithoutPassword;
+  return { name, email, id: _id };
+};
+
 module.exports = {
   createUser,
   existingEmail,
+  checkLogin,
 };

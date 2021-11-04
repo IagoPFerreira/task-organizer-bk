@@ -21,6 +21,8 @@ app.route('/tarefas/:id')
 app.route('/users')
   .post(userController.createUser);
 
+app.post('/login', userController.login);
+
 const PORT = 8080;
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}`));

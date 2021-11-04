@@ -160,11 +160,12 @@ describe('POST /users', () => {
       });
 
       after(async () => {
-        db.collection('users').deleteMany({
-          name: 'Yarpen Zigrin',
-          email: 'yarpenzigrin@anao.com',
-          password: '123456789',
-        });
+        db.collection('users').drop();
+        // .deleteMany({
+        //   name: 'Yarpen Zigrin',
+        //   email: 'yarpenzigrin@anao.com',
+        //   password: '123456789',
+        // });
       });
 
       it('retorna o código de status 409', () => {
@@ -179,7 +180,7 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Invalid entries. Try again."', () => {
+      it('a propriedade "data" possui o texto "Email already registered"', () => {
         expect(response.body.data).to.be.equal('Email already registered');
       });
     });
@@ -213,20 +214,20 @@ describe('POST /users', () => {
         expect(response).to.be.a('object');
       });
 
-      it('o objeto possui a propriedade "user"', () => {
-        expect(response.body).to.have.property('user');
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "user" é um objeto', () => {
-        expect(response.body.user).to.be.a('object');
+      it('a propriedade "data" é um objeto', () => {
+        expect(response.body.data).to.be.a('object');
       });
 
-      it('a propriedade "user" ter as informações do usuário', () => {
-        expect(response.body.user.name).to.be.equal('Yarpen Zigrin');
-        expect(response.body.user.email).to.be.equal(
+      it('a propriedade "data" ter as informações do usuário', () => {
+        expect(response.body.data.name).to.be.equal('Yarpen Zigrin');
+        expect(response.body.data.email).to.be.equal(
           'yarpenzigrin@anao.com'
         );
-        expect(response.body.user).to.have.property('_id');
+        expect(response.body.data).to.have.property('id');
       });
     });
   });

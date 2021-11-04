@@ -2,7 +2,7 @@ const chai = require('chai');
 const { expect } = chai;
 const chaiHttp = require('chai-http');
 const sinon = require('sinon');
-const { MongoClient, Db } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const mock = require('./connectionMock');
 
 chai.use(chaiHttp);
@@ -27,11 +27,41 @@ describe('GET /tarefas', () => {
   });
 
   describe('Casos de falha', () => {
+    let token;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando não existe nenhuma tarefa cadastrada', async () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).get('/tarefas');
+        response = await chai
+          .request(server)
+          .get('/tarefas')
+          .set({ authorization: token });
       });
 
       it('retorna o código de status 404', () => {
@@ -55,11 +85,42 @@ describe('GET /tarefas', () => {
   });  
 
   describe('Casos de sucesso', () => {
+    let token;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando existem tarefas cadastradas', async () => {
       let response = {};
 
       before(async () => {
-        const { body: { data: { _id } } } = await chai.request(server).post('/tarefas').send({
+        const { body: { data: { _id } } } = await chai
+        .request(server)
+        .post('/tarefas')
+        .set({ authorization: token })
+        .send({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Em andamento /get',
           date: '03/11/2021',
@@ -67,13 +128,14 @@ describe('GET /tarefas', () => {
 
         currentId = _id;
 
-        response = await chai.request(server).get('/tarefas');
+        response = await chai
+        .request(server)
+        .get('/tarefas')
+        .set({ authorization: token });
       });
 
       after(async () => {
-        await db.collection('tasks').deleteMany({
-          _id: currentId,
-        });
+        db.collection('users').drop();
       });
 
       it('retorna o código de status 200', () => {
@@ -118,11 +180,45 @@ describe('GET /tarefas/:id', () => {
   });
 
   describe('Casos de falha', () => {
+    let token;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando a tarefa não está cadastrada', async () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).get('/tarefas/6183c3fd9d40282433fde788');
+        response = await chai
+          .request(server)
+          .get('/tarefas/6183c3fd9d40282433fde788')
+          .set({ authorization: token });
+      });
+
+      after(async () => {
+        db.collection('users').drop();
       });
 
       it('retorna o código de status 404', () => {
@@ -146,11 +242,42 @@ describe('GET /tarefas/:id', () => {
   });  
 
   describe('Casos de sucesso', () => {
+    let token;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando a tarefa está cadastrada', async () => {
       let response = {};
 
       before(async () => {
-        const {body: { data: { _id } } } = await chai.request(server).post('/tarefas').send({
+        const {body: { data: { _id } } } = await chai
+          .request(server)
+          .post('/tarefas')
+          .set({ authorization: token })
+          .send({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Em andamento',
           date: '03/11/2021',
@@ -158,7 +285,10 @@ describe('GET /tarefas/:id', () => {
 
         currentId = _id;
 
-        response = await chai.request(server).get(`/tarefas/${_id}`);
+        response = await chai
+          .request(server)
+          .get(`/tarefas/${_id}`)
+          .set({ authorization: token });
       });
 
       after(async () => {
@@ -209,12 +339,42 @@ describe('POST /tarefas', () => {
   after(async () => {
     MongoClient.connect.restore();
   });
+
   describe('Casos de falha', async () => {
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando não é passado o "name"', () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).post('/tarefas').send({
+        response = await chai
+          .request(server)
+          .post('/tarefas')
+          .set({ authorization: token })
+          .send({
           status: 'Em andamento',
         });
       });
@@ -242,7 +402,11 @@ describe('POST /tarefas', () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).post('/tarefas').send({
+        response = await chai
+          .request(server)
+          .post('/tarefas')
+          .set({ authorization: token })
+          .send({
           name: 'Criar os testes da rota "/tarefas"',
         });
       });
@@ -268,11 +432,40 @@ describe('POST /tarefas', () => {
   });
 
   describe('Casos de sucesso', () => {
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando todas as informações são passadas', async () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).post('/tarefas').send({
+        response = await chai
+          .request(server)
+          .post('/tarefas')
+          .set({ authorization: token })
+          .send({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Em andamento',
           date: '03/11/2021',
@@ -329,9 +522,34 @@ describe('PUT /tarefas', () => {
   });
 
   describe('Casos de falha', async () => {
+    let token;
     let task;
+
     before(async () => {
-      task = await chai.request(server).post('/tarefas').send({
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+
+      task = await chai
+        .request(server)
+        .post('/tarefas')
+        .set({ authorization: token })
+        .send({
         name: 'Criar os testes da rota "/tarefas"',
         status: 'Pendente',
         date: '03/11/2021',
@@ -339,10 +557,7 @@ describe('PUT /tarefas', () => {
     });
 
     after(async () => {
-      const { _id } = task.body.data;
-      db.collection('tasks').deleteMany({
-        _id,
-      });
+      db.collection('users').drop();
     });
 
     describe('Quando não é passado o "name"', () => {
@@ -350,7 +565,11 @@ describe('PUT /tarefas', () => {
 
       before(async () => {
         const { _id } = task.body.data;
-        response = await chai.request(server).put('/tarefas').send({
+        response = await chai
+          .request(server)
+          .put('/tarefas')
+          .set({ authorization: token })
+          .send({
           status: 'Pendente',
           date: '03/11/2021',
           _id,
@@ -381,7 +600,11 @@ describe('PUT /tarefas', () => {
 
       before(async () => {
         const { _id } = task.body.data;
-        response = await chai.request(server).put('/tarefas').send({
+        response = await chai
+          .request(server)
+          .put('/tarefas')
+          .set({ authorization: token })
+          .send({
           name: 'Criar os testes da rota "/tarefas"',
           date: '03/11/2021',
           _id,
@@ -411,7 +634,11 @@ describe('PUT /tarefas', () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).put('/tarefas').send({
+        response = await chai
+          .request(server)
+          .put('/tarefas')
+          .set({ authorization: token })
+          .send({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Pendente',
           date: '03/11/2021',
@@ -439,45 +666,58 @@ describe('PUT /tarefas', () => {
   });
 
   describe('Casos de sucesso', async () => {
-    // let response;
-    // before(async () => {
-    //   response = await chai.request(server)
-    //   .post('/tarefas').send({
-    //     name: 'Criar os testes da rota "/tarefas"',
-    //     status: 'Pendente',
-    //     date: '03/11/2021',
-    //   }).then(({ body: { data: { _id } } }) => chai.request(server)
-    //       .put('/tarefas').send({
-    //         name: 'Criar os testes da rota "/tarefas"',
-    //         status: 'Concluída',
-    //         date: '03/11/2021',
-    //         _id,
-    //       }));
-    // });
+    let token;
+    let task;
 
-    // let task;
-    // before(async () => {
-    //   task = await chai.request(server).post('/tarefas').send({
-    //     name: 'Criar os testes da rota "/tarefas"',
-    //     status: 'Pendente',
-    //     date: '03/11/2021',
-    //   });
-    // });
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+
+      task = await chai
+        .request(server)
+        .post('/tarefas')
+        .set({ authorization: token })
+        .send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Pendente',
+          date: '03/11/2021',
+      });
+      
+      currentId = task.body.data['_id']
+    });
 
     after(async () => {
-      db.collection('tasks').deleteMany({
-        _id: currentId,
-      });
+      db.collection('users').drop();
     });
 
     describe('Quando todas as informações são passadas', () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).put('/tarefas').send({
-          name: 'Criar os testes da rota "/tarefas"',
-          status: 'Concluída',
-          _id: currentId,
+        response = await chai
+          .request(server)
+          .put('/tarefas')
+          .set({ authorization: token })
+          .send({
+            name: 'Criar os testes da rota "/tarefas"',
+            status: 'Concluída',
+            _id: currentId,
         });
       });
 
@@ -519,12 +759,52 @@ describe('DELETE /tarefas/:id', () => {
   });
 
   describe('Casos de falha', () => {
+    let token;
+    let task;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+      });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+
+      task = await chai
+        .request(server)
+        .post('/tarefas')
+        .set({ authorization: token })
+        .send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Pendente',
+          date: '03/11/2021',
+      });
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando a tarefa não está cadastrada', async () => {
       let response = {};
 
       before(async () => {
         response = await chai
-          .request(server).delete('/tarefas/618310ab635c3b7aac2e07fa');
+          .request(server)
+          .delete('/tarefas/618310ab635c3b7aac2e07fa')
+          .set({ authorization: token });
       });
       
       
@@ -549,11 +829,54 @@ describe('DELETE /tarefas/:id', () => {
   });  
 
   describe('Casos de sucesso', () => {
+    let token;
+    let task;
+
+    before(async () => {
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+
+      task = await chai
+        .request(server)
+        .post('/tarefas')
+        .set({ authorization: token })
+        .send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Pendente',
+          date: '03/11/2021',
+      });
+      
+      currentId = task.body.data['_id']
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+    });
+
     describe('Quando a tarefa está cadastrada', async () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).delete(`/tarefas/${currentId}`)
+        response = await chai
+          .request(server)
+          .delete(`/tarefas/${currentId}`)
+          .set({ authorization: token });
       });
 
       after(async () => {

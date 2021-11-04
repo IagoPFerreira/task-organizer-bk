@@ -13,6 +13,8 @@ app.route('/tarefas')
   .post(taskController.insertTask)
   .put(taskController.updateTask);
 
+app.get('/tarefas/:id', taskController.getTaskById);
+
 const PORT = 8080;
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}`));

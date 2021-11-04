@@ -44,7 +44,6 @@ describe('GET /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -102,7 +101,6 @@ describe('GET /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -197,7 +195,6 @@ describe('GET /tasks/:id', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -259,7 +256,6 @@ describe('GET /tasks/:id', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -356,7 +352,6 @@ describe('POST /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -447,7 +442,6 @@ describe('POST /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -540,7 +534,6 @@ describe('PUT /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -684,7 +677,6 @@ describe('PUT /tasks', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -777,7 +769,6 @@ describe('DELETE /tasks/:id', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })
@@ -847,7 +838,6 @@ describe('DELETE /tasks/:id', () => {
         .request(server)
         .post('/login')
         .send({
-          name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
         })

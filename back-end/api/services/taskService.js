@@ -44,9 +44,18 @@ const updateTask = async (id, {
   return ({ status: 200, data: task });
 };
 
+const deleteTask = async (id) => {
+  const task = await model.deleteTask(id);
+
+  if (!task) return ({ status: 404, data: 'Tarefa não encontrada.' });
+
+  return ({ status: 204 });
+};
+
 module.exports = {
   getAllTasks,
   getTaskById,
   insertTask,
   updateTask,
+  deleteTask,
 };

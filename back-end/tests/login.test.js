@@ -34,11 +34,7 @@ describe('POST /login', () => {
     });
 
     after(async () => {
-      db.collection('users').deleteMany({
-        name: 'Yarpen Zigrin',
-        email: 'yarpenzigrin@anao.com',
-        password: '123456789',
-      });
+      db.collection('users').drop();
     });
 
     describe('Quando não é passado o campo "email"', () => {
@@ -162,11 +158,7 @@ describe('POST /login', () => {
     });
 
     after(async () => {
-      db.collection('users').deleteMany({
-        name: 'Yarpen Zigrin',
-        email: 'yarpenzigrin@anao.com',
-        password: '123456789',
-      });
+      db.collection('users').drop();
     });
 
     describe('Quando é feito o login', () => {

@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const coll = 'tasks';
@@ -23,11 +24,16 @@ const insertTask = async (name, status) => {
   return task;
 };
 
-// const updateTask = () => {
+const updateTask = async (id, body) => {
+  const task = await connection()
+    .then((db) => db.collection(coll).updateOne({ _id: ObjectId(id) }, { $set: { ...body } }));
 
-// };
+  // console.log('🚀 ~ file: taskModel.js ~ line 33 ~ updateTask ~ task', task);
+  return task;
+};
 
 module.exports = {
   getAllTasks,
   insertTask,
+  updateTask,
 };

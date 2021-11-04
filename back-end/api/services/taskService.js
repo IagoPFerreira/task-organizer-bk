@@ -10,7 +10,6 @@ const getAllTasks = async () => {
 
 const insertTask = async ({ name, status }) => {
   if (!name || !status) return ({ status: 400, data: 'Entradas inválidas. Tente novamente.' });
-  console.log('antes de inserir');
 
   const task = await model.insertTask(name, status);
 
@@ -19,7 +18,24 @@ const insertTask = async ({ name, status }) => {
   return ({ status: 201, data: task });
 };
 
+const updateTask = async (id, {
+  name, status, date,
+}) => {
+  if (!name || !status || !id) {
+    return (
+      { status: 400, data: 'Entradas inválidas. Tente novamente.' }
+    );
+  }
+
+  const task = await model.updateTask(id, {
+    name, status, id, date,
+  });
+
+  return ({ status: 200, data: task });
+};
+
 module.exports = {
   getAllTasks,
   insertTask,
+  updateTask,
 };

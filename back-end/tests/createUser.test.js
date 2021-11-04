@@ -8,6 +8,7 @@ const mock = require('./connectionMock');
 chai.use(chaiHttp);
 
 const server = require('../api/app/app');
+const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED } = require('../messages/errorMessages');
 
 describe('POST /users', () => {
   let db;
@@ -47,10 +48,8 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Invalid entries. Try again."', () => {
-        expect(response.body.data).to.be.equal(
-          'Invalid entries. Try again.'
-        );
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
       });
     });
 
@@ -76,10 +75,8 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Invalid entries. Try again."', () => {
-        expect(response.body.data).to.be.equal(
-          'Invalid entries. Try again.'
-        );
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
       });
     });
 
@@ -106,10 +103,8 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Invalid entries. Try again."', () => {
-        expect(response.body.data).to.be.equal(
-          'Invalid entries. Try again.'
-        );
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
       });
     });
 
@@ -135,10 +130,8 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Invalid entries. Try again."', () => {
-        expect(response.body.data).to.be.equal(
-          'Invalid entries. Try again.'
-        );
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
       });
     });
 
@@ -180,8 +173,8 @@ describe('POST /users', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Email already registered"', () => {
-        expect(response.body.data).to.be.equal('Email already registered');
+      it(`a propriedade "data" possui o texto "${EMAIL_ALREADY_REGISTRED}"`, () => {
+        expect(response.body.data).to.be.equal(EMAIL_ALREADY_REGISTRED);
       });
     });
   });

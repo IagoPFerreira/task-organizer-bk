@@ -8,6 +8,7 @@ const mock = require('./connectionMock');
 chai.use(chaiHttp);
 
 const server = require('../api/app/app');
+const { ALL_FILDES_FILLED, INCORRECT_USERNAME_OR_PASSWORD } = require('../messages/errorMessages');
 
 describe('POST /login', () => {
   let db;
@@ -58,8 +59,8 @@ describe('POST /login', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "All fields must be filled"', () => {
-        expect(response.body.data).to.be.equal('All fields must be filled');
+      it(`a propriedade "data" possui o texto "${ALL_FILDES_FILLED}"`, () => {
+        expect(response.body.data).to.be.equal(ALL_FILDES_FILLED);
       });
     });
 
@@ -84,8 +85,8 @@ describe('POST /login', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "All fields must be filled"', () => {
-        expect(response.body.data).to.be.equal('All fields must be filled');
+      it(`a propriedade "data" possui o texto "${ALL_FILDES_FILLED}"`, () => {
+        expect(response.body.data).to.be.equal(ALL_FILDES_FILLED);
       });
     });
 
@@ -111,10 +112,8 @@ describe('POST /login', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Incorrect username or password"', () => {
-        expect(response.body.data).to.be.equal(
-          'Incorrect username or password'
-        );
+      it(`a propriedade "data" possui o texto "${INCORRECT_USERNAME_OR_PASSWORD}"`, () => {
+        expect(response.body.data).to.be.equal(INCORRECT_USERNAME_OR_PASSWORD);
       });
     });
 
@@ -140,10 +139,8 @@ describe('POST /login', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Incorrect username or password"', () => {
-        expect(response.body.data).to.be.equal(
-          'Incorrect username or password'
-        );
+      it(`a propriedade "data" possui o texto "${INCORRECT_USERNAME_OR_PASSWORD}"`, () => {
+        expect(response.body.data).to.be.equal(INCORRECT_USERNAME_OR_PASSWORD);
       });
     });
   });

@@ -8,6 +8,7 @@ const mock = require('./connectionMock');
 chai.use(chaiHttp);
 
 const server = require('../api/app/app');
+const { NO_REGISTRED_TASKS, TASK_NOT_FOUND, INVALID_ENTRIES } = require('../messages/errorMessages');
 
 let currentId;
 
@@ -76,9 +77,9 @@ describe('GET /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Não existe tasks cadastradas"', () => {
+      it(`a propriedade "data" possui o texto "${NO_REGISTRED_TASKS}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Não existe tarefas cadastradas'
+          NO_REGISTRED_TASKS
         );
       });
     });
@@ -233,9 +234,9 @@ describe('GET /tasks/:id', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Tarefa não encontrada."', () => {
+      it(`a propriedade "data" possui o texto "${TASK_NOT_FOUND}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Tarefa não encontrada.'
+          TASK_NOT_FOUND
         );
       });
     });
@@ -391,9 +392,9 @@ describe('POST /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
+          INVALID_ENTRIES
         );
       });
     });
@@ -423,9 +424,9 @@ describe('POST /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
+          INVALID_ENTRIES
         );
       });
     });
@@ -588,9 +589,9 @@ describe('PUT /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
+          INVALID_ENTRIES
         );
       });
     });
@@ -623,9 +624,9 @@ describe('PUT /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
+          INVALID_ENTRIES
         );
       });
     });
@@ -657,9 +658,9 @@ describe('PUT /tasks', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
+          INVALID_ENTRIES
         );
       });
     });
@@ -820,9 +821,9 @@ describe('DELETE /tasks/:id', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+      it(`a propriedade "data" possui o texto "${TASK_NOT_FOUND}"`, () => {
         expect(response.body.data).to.be.equal(
-          'Tarefa não encontrada.'
+          TASK_NOT_FOUND
         );
       });
     });

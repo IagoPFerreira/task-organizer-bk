@@ -4,12 +4,19 @@ const connection = require('./connection');
 const coll = 'tasks';
 
 const getAllTasks = async () => {
-  const tasks = await connection()
-    .then((db) => db.collection(coll).find().toArray());
+  const tasks = await connection().then((db) => db.collection(coll).find().toArray());
 
   if (tasks.length === 0) return null;
 
   return tasks;
+};
+
+const getTaskById = async (id) => {
+  const task = await connection().then((db) => db.collection(coll).findOne({ _id: ObjectId(id) }));
+
+  if (!task) return null;
+
+  return task;
 };
 
 const insertTask = async (name, status) => {
@@ -17,7 +24,9 @@ const insertTask = async (name, status) => {
 
   const task = await connection()
     .then((db) => db.collection(coll).insertOne({
-      name, status, date,
+      name,
+      status,
+      date,
     }))
     .then((result) => ({ ...result.ops[0] }));
 
@@ -25,15 +34,17 @@ const insertTask = async (name, status) => {
 };
 
 const updateTask = async (id, body) => {
-  const task = await connection()
+  await connection()
     .then((db) => db.collection(coll).updateOne({ _id: ObjectId(id) }, { $set: { ...body } }));
 
-  // console.log('🚀 ~ file: taskModel.js ~ line 33 ~ updateTask ~ task', task);
+  const task = await getTaskById(id);
+
   return task;
 };
 
 module.exports = {
   getAllTasks,
+  getTaskById,
   insertTask,
   updateTask,
 };

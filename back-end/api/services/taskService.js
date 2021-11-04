@@ -3,9 +3,17 @@ const model = require('../models/taskModel');
 const getAllTasks = async () => {
   const tasks = await model.getAllTasks();
 
-  if (!tasks) return ({ status: 204 });
+  if (!tasks) return ({ status: 404, data: 'Não existe tarefas cadastradas' });
 
   return ({ status: 200, data: tasks });
+};
+
+const getTaskById = async (id) => {
+  const task = await model.getTaskById(id);
+
+  if (!task) return ({ status: 404, data: 'Tarefa não encontrada.' });
+
+  return ({ status: 200, data: task });
 };
 
 const insertTask = async ({ name, status }) => {
@@ -31,11 +39,14 @@ const updateTask = async (id, {
     name, status, id, date,
   });
 
+  if (!task) return ({ status: 404, data: 'Tarefa não encontrada.' });
+
   return ({ status: 200, data: task });
 };
 
 module.exports = {
   getAllTasks,
+  getTaskById,
   insertTask,
   updateTask,
 };

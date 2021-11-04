@@ -6,6 +6,14 @@ const getAllTasks = async (_req, res) => {
   return res.status(status).json({ data });
 };
 
+const getTaskById = async (req, res) => {
+  const { id } = req.params;
+
+  const { status, data } = await service.getTaskById(id);
+
+  return res.status(status).json({ data });
+};
+
 const insertTask = async (req, res) => {
   const { status, data } = await service.insertTask(req.body);
 
@@ -22,6 +30,7 @@ const updateTask = async (req, res) => {
 
 module.exports = {
   getAllTasks,
+  getTaskById,
   insertTask,
   updateTask,
 };

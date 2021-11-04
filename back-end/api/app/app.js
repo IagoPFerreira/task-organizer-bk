@@ -11,7 +11,8 @@ app.use(cors());
 app.route('/tarefas')
   .get(taskController.getAllTasks)
   .post(taskController.insertTask)
-  .put(taskController.updateTask);
+  .put(taskController.updateTask)
+  .delete(taskController.deleteTask);
 
 app.get('/tarefas/:id', taskController.getTaskById);
 

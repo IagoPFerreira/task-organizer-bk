@@ -503,7 +503,7 @@ describe('PUT /tarefas', () => {
   });
 });
 
-describe('DELETE /tarefas', () => {
+describe('DELETE /tarefas/:id', () => {
   let db;
 
   before(async () => {
@@ -519,38 +519,12 @@ describe('DELETE /tarefas', () => {
   });
 
   describe('Casos de falha', () => {
-    describe('Quando não é passado o "_id"', () => {
-      let response = {};
-
-      before(async () => {
-        response = await chai.request(server).delete('/tarefas').send({});
-      });
-
-      it('retorna o código de status 400', () => {
-        expect(response).to.have.status(400);
-      });
-
-      it('retorna um objeto', () => {
-        expect(response).to.be.a('object');
-      });
-
-      it('o objeto possui a propriedade "data"', () => {
-        expect(response.body).to.have.property('data');
-      });
-
-      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
-        expect(response.body.data).to.be.equal(
-          'Entradas inválidas. Tente novamente.'
-        );
-      });
-    });
-
     describe('Quando a tarefa não está cadastrada', async () => {
       let response = {};
 
       before(async () => {
         response = await chai
-          .request(server).delete('/tarefas').send({ _id: '6183c3fd9d40282433fde788' });
+          .request(server).delete('/tarefas/618310ab635c3b7aac2e07fa');
       });
       
       
@@ -579,11 +553,7 @@ describe('DELETE /tarefas', () => {
       let response = {};
 
       before(async () => {
-        response = await chai.request(server).delete('/tarefas').send({
-          _id: currentId
-        });
-
-        tasks = await chai.request(server).get('/tarefas');
+        response = await chai.request(server).delete(`/tarefas/${currentId}`)
       });
 
       after(async () => {

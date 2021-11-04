@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 const server = require('../api/app/app');
 
-let id;
+let currentId;
 
 describe('GET /tarefas', () => {
   let db;
@@ -59,19 +59,20 @@ describe('GET /tarefas', () => {
       let response = {};
 
       before(async () => {
-        await chai.request(server).post('/tarefas').send({
+        const { body: { data: { _id } } } = await chai.request(server).post('/tarefas').send({
           name: 'Criar os testes da rota "/tarefas"',
-          status: 'Em andamento',
+          status: 'Em andamento /get',
           date: '03/11/2021',
         });
+
+        currentId = _id;
 
         response = await chai.request(server).get('/tarefas');
       });
 
       after(async () => {
-        db.collection('tasks').deleteMany({
-          name: 'Criar os testes da rota "/tarefas"',
-          status: 'Em andamento',
+        await db.collection('tasks').deleteMany({
+          _id: currentId,
         });
       });
 
@@ -155,6 +156,8 @@ describe('GET /tarefas/:id', () => {
           date: '03/11/2021',
         });
 
+        currentId = _id;
+
         response = await chai.request(server).get(`/tarefas/${_id}`);
       });
 
@@ -162,7 +165,7 @@ describe('GET /tarefas/:id', () => {
         db.collection('tasks').deleteMany({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Em andamento',
-          _id: id,
+          _id: currentId,
         });
       });
 
@@ -275,17 +278,14 @@ describe('POST /tarefas', () => {
           date: '03/11/2021',
         });
 
-        id = response.body.data['_id'];
+        currentId = response.body.data['_id'];
       });
 
-      //     after(async () => {
-      //       const { _id } = response.body.data;
-      //       db.collection('tasks').deleteMany({
-      //         name: 'Criar os testes da rota "/tarefas"',
-      //         status: 'Em andamento',
-      //         _id,
-      //       });
-      //     });
+      after(async () => {
+        db.collection('tasks').deleteMany({
+          _id: currentId,
+        });
+      });
 
       it('retorna o código de status 201', () => {
         expect(response).to.have.status(201);
@@ -341,8 +341,6 @@ describe('PUT /tarefas', () => {
     after(async () => {
       const { _id } = task.body.data;
       db.collection('tasks').deleteMany({
-        name: 'Criar os testes da rota "/tarefas"',
-        status: 'Pendente',
         _id,
       });
     });
@@ -468,9 +466,7 @@ describe('PUT /tarefas', () => {
 
     after(async () => {
       db.collection('tasks').deleteMany({
-        name: 'Criar os testes da rota "/tarefas"',
-        status: 'Concluída',
-        _id: id,
+        _id: currentId,
       });
     });
 
@@ -481,7 +477,7 @@ describe('PUT /tarefas', () => {
         response = await chai.request(server).put('/tarefas').send({
           name: 'Criar os testes da rota "/tarefas"',
           status: 'Concluída',
-          _id: id,
+          _id: currentId,
         });
       });
 
@@ -554,7 +550,7 @@ describe('DELETE /tarefas', () => {
 
       before(async () => {
         response = await chai
-          .request(server).delete('/tarefas').send({ _id: id });
+          .request(server).delete('/tarefas').send({ _id: '6183c3fd9d40282433fde788' });
       });
       
       
@@ -583,17 +579,15 @@ describe('DELETE /tarefas', () => {
       let response = {};
 
       before(async () => {
-        await chai.request(server).delete('/tarefas').send({
-          _id: id
+        response = await chai.request(server).delete('/tarefas').send({
+          _id: currentId
         });
 
-        response = await chai.request(server).get('/tarefas');
+        tasks = await chai.request(server).get('/tarefas');
       });
 
       after(async () => {
-        db.collection('tasks').deleteMany({
-          _id: id
-        });
+        db.collection('tasks').drop();
       });
 
       it('retorna o código de status 204', () => {

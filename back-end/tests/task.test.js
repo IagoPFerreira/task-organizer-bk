@@ -415,3 +415,107 @@ describe('PUT /tarefas', () => {
     });
   });
 });
+
+describe('DELETE /tarefas', () => {
+  let db;
+
+  before(async () => {
+    const connectionMock = await mock();
+
+    db = connectionMock.db('TaskOrganizer');
+
+    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+  });
+
+  after(async () => {
+    MongoClient.connect.restore();
+  });
+
+  describe('Casos de falha', () => {
+    describe('Quando não é passado o "_id"', () => {
+      let response = {};
+
+      before(async () => {
+        response = await chai.request(server).delete('/tarefas').send({});
+      });
+
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+        expect(response.body.data).to.be.equal(
+          'Entradas inválidas. Tente novamente.'
+        );
+      });
+    });
+
+    describe('Quando a tarefa não está cadastrada', async () => {
+      let response = {};
+
+      before(async () => {
+        response = await chai
+          .request(server).delete('/tarefas').send({ _id: id });
+      });
+      
+      
+      it('retorna o código de status 404', () => {
+        expect(response).to.have.status(404);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" possui o texto "Entradas inválidas. Tente novamente."', () => {
+        expect(response.body.data).to.be.equal(
+          'Tarefa não encontrada.'
+        );
+      });
+    });
+  });  
+
+  describe('Casos de sucesso', () => {
+    describe('Quando a tarefa está cadastrada', async () => {
+      let response = {};
+
+      before(async () => {
+        await chai.request(server).delete('/tarefas').send({
+          _id: id
+        });
+
+        response = await chai.request(server).get('/tarefas');
+      });
+
+      after(async () => {
+        db.collection('tasks').deleteMany({
+          _id: id
+        });
+      });
+
+      it('retorna o código de status 204', () => {
+        expect(response).to.have.status(204);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).not.to.have.property('data');
+      });
+    });
+  });
+});

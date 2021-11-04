@@ -11,7 +11,7 @@ const server = require('../api/app/app');
 
 let currentId;
 
-describe('GET /tarefas', () => {
+describe('GET /tasks', () => {
   let db;
 
   before(async () => {
@@ -60,7 +60,7 @@ describe('GET /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .get('/tarefas')
+          .get('/tasks')
           .set({ authorization: token });
       });
 
@@ -76,7 +76,7 @@ describe('GET /tarefas', () => {
         expect(response.body).to.have.property('data');
       });
 
-      it('a propriedade "data" possui o texto "Não existe tarefas cadastradas"', () => {
+      it('a propriedade "data" possui o texto "Não existe tasks cadastradas"', () => {
         expect(response.body.data).to.be.equal(
           'Não existe tarefas cadastradas'
         );
@@ -112,16 +112,16 @@ describe('GET /tarefas', () => {
       db.collection('users').drop();
     });
 
-    describe('Quando existem tarefas cadastradas', async () => {
+    describe('Quando existem tasks cadastradas', async () => {
       let response = {};
 
       before(async () => {
         const { body: { data: { _id } } } = await chai
         .request(server)
-        .post('/tarefas')
+        .post('/tasks')
         .set({ authorization: token })
         .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Em andamento /get',
           date: '03/11/2021',
         });
@@ -130,7 +130,7 @@ describe('GET /tarefas', () => {
 
         response = await chai
         .request(server)
-        .get('/tarefas')
+        .get('/tasks')
         .set({ authorization: token });
       });
 
@@ -164,7 +164,7 @@ describe('GET /tarefas', () => {
   });
 });
 
-describe('GET /tarefas/:id', () => {
+describe('GET /tasks/:id', () => {
   let db;
 
   before(async () => {
@@ -213,7 +213,7 @@ describe('GET /tarefas/:id', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .get('/tarefas/6183c3fd9d40282433fde788')
+          .get('/tasks/6183c3fd9d40282433fde788')
           .set({ authorization: token });
       });
 
@@ -275,10 +275,10 @@ describe('GET /tarefas/:id', () => {
       before(async () => {
         const {body: { data: { _id } } } = await chai
           .request(server)
-          .post('/tarefas')
+          .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Em andamento',
           date: '03/11/2021',
         });
@@ -287,13 +287,13 @@ describe('GET /tarefas/:id', () => {
 
         response = await chai
           .request(server)
-          .get(`/tarefas/${_id}`)
+          .get(`/tasks/${_id}`)
           .set({ authorization: token });
       });
 
       after(async () => {
         db.collection('tasks').deleteMany({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Em andamento',
           _id: currentId,
         });
@@ -325,7 +325,7 @@ describe('GET /tarefas/:id', () => {
   });
 });
 
-describe('POST /tarefas', () => {
+describe('POST /tasks', () => {
   let db;
 
   before(async () => {
@@ -372,7 +372,7 @@ describe('POST /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .post('/tarefas')
+          .post('/tasks')
           .set({ authorization: token })
           .send({
           status: 'Em andamento',
@@ -404,10 +404,10 @@ describe('POST /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .post('/tarefas')
+          .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
         });
       });
 
@@ -463,10 +463,10 @@ describe('POST /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .post('/tarefas')
+          .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Em andamento',
           date: '03/11/2021',
         });
@@ -506,7 +506,7 @@ describe('POST /tarefas', () => {
   });
 });
 
-describe('PUT /tarefas', () => {
+describe('PUT /tasks', () => {
   let db;
 
   before(async () => {
@@ -547,10 +547,10 @@ describe('PUT /tarefas', () => {
 
       task = await chai
         .request(server)
-        .post('/tarefas')
+        .post('/tasks')
         .set({ authorization: token })
         .send({
-        name: 'Criar os testes da rota "/tarefas"',
+        name: 'Criar os testes da rota "/tasks"',
         status: 'Pendente',
         date: '03/11/2021',
       });
@@ -567,7 +567,7 @@ describe('PUT /tarefas', () => {
         const { _id } = task.body.data;
         response = await chai
           .request(server)
-          .put('/tarefas')
+          .put('/tasks')
           .set({ authorization: token })
           .send({
           status: 'Pendente',
@@ -602,10 +602,10 @@ describe('PUT /tarefas', () => {
         const { _id } = task.body.data;
         response = await chai
           .request(server)
-          .put('/tarefas')
+          .put('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           date: '03/11/2021',
           _id,
         });
@@ -636,10 +636,10 @@ describe('PUT /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .put('/tarefas')
+          .put('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
         });
@@ -691,10 +691,10 @@ describe('PUT /tarefas', () => {
 
       task = await chai
         .request(server)
-        .post('/tarefas')
+        .post('/tasks')
         .set({ authorization: token })
         .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
       });
@@ -712,10 +712,10 @@ describe('PUT /tarefas', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .put('/tarefas')
+          .put('/tasks')
           .set({ authorization: token })
           .send({
-            name: 'Criar os testes da rota "/tarefas"',
+            name: 'Criar os testes da rota "/tasks"',
             status: 'Concluída',
             _id: currentId,
         });
@@ -743,7 +743,7 @@ describe('PUT /tarefas', () => {
   });
 });
 
-describe('DELETE /tarefas/:id', () => {
+describe('DELETE /tasks/:id', () => {
   let db;
 
   before(async () => {
@@ -784,10 +784,10 @@ describe('DELETE /tarefas/:id', () => {
 
       task = await chai
         .request(server)
-        .post('/tarefas')
+        .post('/tasks')
         .set({ authorization: token })
         .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
       });
@@ -803,7 +803,7 @@ describe('DELETE /tarefas/:id', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .delete('/tarefas/618310ab635c3b7aac2e07fa')
+          .delete('/tasks/618310ab635c3b7aac2e07fa')
           .set({ authorization: token });
       });
       
@@ -854,10 +854,10 @@ describe('DELETE /tarefas/:id', () => {
 
       task = await chai
         .request(server)
-        .post('/tarefas')
+        .post('/tasks')
         .set({ authorization: token })
         .send({
-          name: 'Criar os testes da rota "/tarefas"',
+          name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
       });
@@ -875,7 +875,7 @@ describe('DELETE /tarefas/:id', () => {
       before(async () => {
         response = await chai
           .request(server)
-          .delete(`/tarefas/${currentId}`)
+          .delete(`/tasks/${currentId}`)
           .set({ authorization: token });
       });
 

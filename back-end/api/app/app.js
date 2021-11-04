@@ -10,12 +10,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.route('/tarefas')
+app.route('/tasks')
   .get(validateToken, taskController.getAllTasks)
   .post(validateToken, taskController.insertTask)
   .put(validateToken, taskController.updateTask);
 
-app.route('/tarefas/:id')
+app.route('/tasks/:id')
   .get(validateToken, taskController.getTaskById)
   .delete(validateToken, taskController.deleteTask);
 

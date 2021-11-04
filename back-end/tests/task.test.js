@@ -173,7 +173,7 @@ describe('POST /tarefas', () => {
         date: '03/11/2021',
       });
 
-      id = response.body.data['_id']
+      id = response.body.data['_id'];
     });
 
     //     after(async () => {
@@ -337,143 +337,71 @@ describe('PUT /tarefas', () => {
     });
   });
 
-  // describe('Caso de sucesso', async () => {
-  //   // let response;
-  //   // before(async () => {
-  //   //   response = await chai.request(server)
-  //   //   .post('/tarefas').send({
-  //   //     name: 'Criar os testes da rota "/tarefas"',
-  //   //     status: 'Pendente',
-  //   //     date: '03/11/2021',
-  //   //   }).then(({ body: { data: { _id } } }) => chai.request(server)
-  //   //       .put('/tarefas').send({
-  //   //         name: 'Criar os testes da rota "/tarefas"',
-  //   //         status: 'Concluída',
-  //   //         date: '03/11/2021',
-  //   //         _id,
-  //   //       }));
-  //   // });
+  describe('Caso de sucesso', async () => {
+    // let response;
+    // before(async () => {
+    //   response = await chai.request(server)
+    //   .post('/tarefas').send({
+    //     name: 'Criar os testes da rota "/tarefas"',
+    //     status: 'Pendente',
+    //     date: '03/11/2021',
+    //   }).then(({ body: { data: { _id } } }) => chai.request(server)
+    //       .put('/tarefas').send({
+    //         name: 'Criar os testes da rota "/tarefas"',
+    //         status: 'Concluída',
+    //         date: '03/11/2021',
+    //         _id,
+    //       }));
+    // });
 
-  //   // let task;
-  //   // before(async () => {
-  //   //   task = await chai.request(server).post('/tarefas').send({
-  //   //     name: 'Criar os testes da rota "/tarefas"',
-  //   //     status: 'Pendente',
-  //   //     date: '03/11/2021',
-  //   //   });
-  //   // });
+    // let task;
+    // before(async () => {
+    //   task = await chai.request(server).post('/tarefas').send({
+    //     name: 'Criar os testes da rota "/tarefas"',
+    //     status: 'Pendente',
+    //     date: '03/11/2021',
+    //   });
+    // });
 
-  //   after(async () => {
-  //     // const { _id } = response.body.data;
-  //     db.collection('tasks').deleteMany({
-  //       name: 'Criar os testes da rota "/tarefas"',
-  //       status: 'Concluída',
-  //       _id: id,
-  //     });
-  //   });
+    after(async () => {
+      db.collection('tasks').deleteMany({
+        name: 'Criar os testes da rota "/tarefas"',
+        status: 'Concluída',
+        _id: id,
+      });
+    });
 
-  //   describe('Quando todas as informações são passadas', () => {
-  //     // let response;
-  //     // before(async () => {
-  //     //   const { _id } = task.body.data;
+    describe('Quando todas as informações são passadas', () => {
+      let response = {};
 
-  //     //   response = await chai.request(server).put('/tarefas').send({
-  //     //     name: 'Criar os testes da rota "/tarefas"',
-  //     //     status: 'Concluída',
-  //     //     date: '03/11/2021',
-  //     //     _id,
-  //     //   });
-  //     // });
+      before(async () => {
+        response = await chai.request(server).put('/tarefas').send({
+          name: 'Criar os testes da rota "/tarefas"',
+          status: 'Concluída',
+          _id: id,
+        });
+      });
 
-  //     let response = {};
+      it('retorna o código de status 200', () => {
+        expect(response).to.have.status(200);
+      });
 
-  //     before(async () => {
-  //       // const { _id } = task.body.data;
-  //       // response = await chai
-  //       //   .request(server)
-  //       //   .put('/tarefas')
-  //       //   .send({
-  //       //     name: 'Criar os testes da rota "/tarefas"',
-  //       //     status: 'Concluída',
-  //       //     _id: id,
-  //       //   })
-  //       //   .end((err, result) => {
-  //       //     expect(err).to.be.null;
-  //       //     expect(result).to.have.status(200);
-  //       //   done();
-  //       //   });
-  //     });
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
 
-  //     it('retorna o código de status 200', () => {
-  //       // console.log(response.body);
-  //       // expect(response).to.have.status(200);
-  //       chai
-  //         .request(server)
-  //         .put('/tarefas')
-  //         .send({
-  //           name: 'Criar os testes da rota "/tarefas"',
-  //           status: 'Concluída',
-  //           _id: id,
-  //         })
-  //           .then((result) => {
-  //             expect(result).not.to.have.status(200);
-  //             done();
-  //           })
-  //         // .end((err, result) => {
-  //         //   expect(err).to.be.null;
-  //         //   expect(result).to.have.status(200);
-  //         // done();
-  //         // });
-  //     });
+      it('o objeto possui a propriedade "data"', async () => {
+        expect(response.body).to.have.property('data');
+      });
 
-  //     it('retorna um objeto', (done) => {
-  //       chai
-  //         .request(server)
-  //         .put('/tarefas')
-  //         .send({
-  //           name: 'Criar os testes da rota "/tarefas"',
-  //           status: 'Concluída',
-  //           _id: id,
-  //         })
-  //           .then((result) => {
-  //             expect(response).not.to.be.a('object');
-  //             done();
-  //           })
-  //       done()
-  //     });
-
-  //     it('o objeto possui a propriedade "data"', async (done) => {
-  //       response = await chai
-  //         .request(server)
-  //         .put('/tarefas')
-  //         .send({
-  //           name: 'Criar os testes da rota "/tarefas"',
-  //           status: 'Concluída',
-  //           _id: id,
-  //         })
-  //           // .then((result) => {
-  //           // })
-  //           expect(response.body).not.to.have.property('data');
-  //           done();
-  //     });
-
-  //     it('a propriedade "data" ter as propriedades da tarefa', () => {
-  //       chai
-  //         .request(server)
-  //         .put('/tarefas')
-  //         .send({
-  //           name: 'Criar os testes da rota "/tarefas"',
-  //           status: 'Concluída',
-  //           _id: id,
-  //         })
-  //           .then(({ body: { data } }) => {
-  //             expect(data).not.to.have.property('name');
-  //             expect(data).not.to.have.property('status');
-  //             expect(data).not.to.have.property('date');
-  //             expect(data).to.have.property('_id');
-  //             done();
-  //           })
-  //     });
-  //   });
-  // });
+      it('a propriedade "data" ter as propriedades da tarefa', () => {
+        expect(response.body.data).to.have.property('name');
+        expect(response.body.data).to.have.property('status');
+        expect(response.body.data).to.have.property('date');
+        expect(response.body.data).to.have.property('_id');
+      });
+    });
+  });
 });
+
+describe('DELETE /tarefas', () => {});

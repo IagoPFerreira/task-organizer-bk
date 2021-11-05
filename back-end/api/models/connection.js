@@ -6,7 +6,7 @@ const OPTIONS = {
   useUnifiedTopology: true,
 };
 
-const MONGO_DB_URL = process.env.MONGO_DB_URI;
+const MONGO_DB_URL = process.env.MONGODB_URI;
 
 let db = null;
 

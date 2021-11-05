@@ -3,11 +3,11 @@ const connection = require('./connection');
 
 const coll = 'users';
 
-const createUser = async (name, password, email) => {
+const createUser = async (name, password, email, role) => {
   const newUser = await connection()
     .then((db) => db.collection(coll)
       .insertOne({
-        name, password, email, userId: new ObjectId(),
+        name, password, email, role, userId: new ObjectId(),
       }))
     .then((result) => {
       const { password: _, ...userWithoutPassword } = result.ops[0];
@@ -47,9 +47,18 @@ const findAllUsers = async () => {
   });
 };
 
+const createAdmin = async (name, password, email, role) => {
+  const existingUser = await existingEmail(email);
+
+  if (existingUser) return updateUser(name, password, email, role);
+
+  return createUser(name, password, email, role);
+};
+
 module.exports = {
   createUser,
   existingEmail,
   checkLogin,
   findAllUsers,
+  createAdmin,
 };

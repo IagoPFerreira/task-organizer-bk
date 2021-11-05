@@ -20,7 +20,8 @@ app.route('/tasks/:id')
   .delete(validateToken, taskController.deleteTask);
 
 app.route('/users')
-  .post(userController.createUser);
+  .post(userController.createUser)
+  .get(validateToken, userController.findAllUsers);
 
 app.post('/login', userController.login);
 

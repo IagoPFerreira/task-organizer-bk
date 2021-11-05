@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./api/app/app.js",
     "dev": "nodemon ./api/app/app.js",
     "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
     "test:watch": "mocha ./tests/**/*$NAME*.{test,spec}.js --watch --recursive --exit"

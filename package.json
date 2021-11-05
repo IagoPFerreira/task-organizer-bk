@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./api/index.js",
-    "dev": "nodemon ./api/index.js",
-    "test": "mocha ./api/tests/**/*$NAME*.{test,spec}.js --exit",
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js",
+    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
     "test:watch": "mocha ./tests/**/*$NAME*.{test,spec}.js --watch --recursive --exit"
   },
   "keywords": [],

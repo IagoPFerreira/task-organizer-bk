@@ -88,6 +88,8 @@ describe('GET /tasks', () => {
     let token;
 
     before(async () => {
+      await db.collection('tasks').deleteMany({});
+      await db.collection('users').deleteMany({});
       await chai
         .request(server)
         .post('/users')
@@ -109,6 +111,7 @@ describe('GET /tasks', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('task').drop();
     });
 
     describe('Quando existem tasks cadastradas', async () => {
@@ -125,8 +128,6 @@ describe('GET /tasks', () => {
           date: '03/11/2021',
         });
 
-        currentId = _id;
-
         response = await chai
         .request(server)
         .get('/tasks')
@@ -135,6 +136,7 @@ describe('GET /tasks', () => {
 
       after(async () => {
         db.collection('users').drop();
+        db.collection('tasks').drop();
       });
 
       it('retorna o código de status 200', () => {
@@ -217,6 +219,7 @@ describe('GET /tasks/:id', () => {
 
       after(async () => {
         db.collection('users').drop();
+        db.collection('tasks').drop();
       });
 
       it('retorna o código de status 404', () => {
@@ -264,6 +267,7 @@ describe('GET /tasks/:id', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('tasks').drop();
     });
 
     describe('Quando a tarefa está cadastrada', async () => {
@@ -429,6 +433,8 @@ describe('POST /tasks', () => {
 
   describe('Casos de sucesso', () => {
     before(async () => {
+      await db.collection('tasks').deleteMany({});
+      await db.collection('users').deleteMany({});
       await chai
         .request(server)
         .post('/users')
@@ -450,6 +456,7 @@ describe('POST /tasks', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('tasks').drop();
     });
 
     describe('Quando todas as informações são passadas', async () => {
@@ -664,6 +671,8 @@ describe('PUT /tasks', () => {
     let task;
 
     before(async () => {
+      await db.collection('users').deleteMany({});
+      await db.collection('tasks').deleteMany({});
       await chai
         .request(server)
         .post('/users')
@@ -697,6 +706,7 @@ describe('PUT /tasks', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('tasks').drop();
     });
 
     describe('Quando todas as informações são passadas', () => {
@@ -787,6 +797,7 @@ describe('DELETE /tasks/:id', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('tasks').drop();
     });
 
     describe('Quando a tarefa não está cadastrada', async () => {
@@ -858,6 +869,7 @@ describe('DELETE /tasks/:id', () => {
 
     after(async () => {
       db.collection('users').drop();
+      db.collection('tasks').drop();
     });
 
     describe('Quando a tarefa está cadastrada', async () => {

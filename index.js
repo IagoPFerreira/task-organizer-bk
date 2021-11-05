@@ -23,6 +23,8 @@ app.route('/users')
   .post(userController.createUser)
   .get(validateToken, userController.findAllUsers);
 
+app.post('/users/admin', validateToken, userController.createAdmin);
+
 app.post('/login', userController.login);
 
 const PORT = process.env.PORT || 8080;

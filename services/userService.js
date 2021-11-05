@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const model = require('../models/userModel');
 const {
   EMAIL_ALREADY_REGISTRED, INVALID_ENTRIES, ALL_FILDES_FILLED,
-  INCORRECT_USERNAME_OR_PASSWORD, NO_REGISTRED_USERS,
+  INCORRECT_USERNAME_OR_PASSWORD, NO_REGISTRED_USERS, ONLY_ADMINS_REGISTER,
+  SERVER_ERROR,
 } = require('../messages/errorMessages');
 
 require('dotenv').config();
@@ -66,8 +67,23 @@ const findAllUsers = async () => {
   return ({ status: 200, data: allUsers });
 };
 
+const createAdmin = async ({
+  name, password, email, role: newAdminRole,
+}, { role: adminRole }) => {
+  if (adminRole !== 'admin') {
+    return ({ status: 403, data: ONLY_ADMINS_REGISTER });
+  }
+
+  const newAdmin = await model.createAdmin(name, password, email, newAdminRole);
+
+  if (!newAdmin) return ({ status: 501, data: SERVER_ERROR });
+
+  return ({ status: 201, data: newAdmin });
+};
+
 module.exports = {
   createUser,
   login,
   findAllUsers,
+  createAdmin,
 };

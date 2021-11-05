@@ -26,8 +26,17 @@ const findAllUsers = async (_req, res) => {
   return res.status(status).json({ data });
 };
 
+const createAdmin = async (req, res) => {
+  const { body, user } = req;
+
+  const { status, data } = await service.createAdmin(body, user);
+
+  return res.status(status).json({ data });
+};
+
 module.exports = {
   createUser,
   login,
   findAllUsers,
+  createAdmin,
 };

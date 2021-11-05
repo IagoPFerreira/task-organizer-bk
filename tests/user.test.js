@@ -86,7 +86,7 @@ describe('GET /users', () => {
       it('a propriedade "data" ter as propriedades do usuário', () => {
         expect(response.body.data[0]).to.have.property('name');
         expect(response.body.data[0]).to.have.property('email');
-        expect(response.body.data[0]).to.have.property('id');
+        expect(response.body.data[0]).to.have.property('userId');
       });
 
       it('a propriedade "data" ter as informações do usuário', () => {
@@ -301,7 +301,7 @@ describe('POST /users', () => {
         expect(response.body.data.email).to.be.equal(
           'yarpenzigrin@anao.com'
         );
-        expect(response.body.data).to.have.property('id');
+        expect(response.body.data).to.have.property('userId');
       });
     });
   });

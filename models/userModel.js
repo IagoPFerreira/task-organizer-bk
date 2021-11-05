@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const coll = 'users';
@@ -7,12 +7,13 @@ const createUser = async (name, password, email, role) => {
   const newUser = await connection()
     .then((db) => db.collection(coll)
       .insertOne({
-        name, password, email, role, userId: new ObjectId(),
+        name, password, email, role,
       }))
     .then((result) => {
-      const { password: _, ...userWithoutPassword } = result.ops[0];
-      const { _id } = userWithoutPassword;
-      return { name, email, id: _id };
+      const { _id } = result.ops[0];
+      return ({
+        name, email, role, userId: _id,
+      });
     });
 
   return newUser;
@@ -31,9 +32,8 @@ const checkLogin = async (email, password) => {
 
   if (!checkingUser) return null;
 
-  const { password: _, ...userWithoutPassword } = checkingUser;
-  const { name, _id } = userWithoutPassword;
-  return { name, email, id: _id };
+  const { name, _id } = checkingUser;
+  return ({ name, email, userId: _id });
 };
 
 const findAllUsers = async () => {
@@ -41,18 +41,41 @@ const findAllUsers = async () => {
     .then((db) => db.collection(coll).find().toArray());
 
   return allUsers.map((user) => {
-    const { password: _, ...userWithoutPassword } = user;
-    const { name, email, _id } = userWithoutPassword;
-    return { name, email, id: _id };
+    const {
+      name, email, role, _id,
+    } = user;
+    return ({
+      name, email, role, userId: _id,
+    });
   });
 };
 
+const updateUser = async (name, password, email, role) => connection()
+  .then((db) => db.collection(coll)
+    .updateOne(
+      { email },
+      {
+        $set: {
+          name, password, email, role,
+        },
+      },
+      {
+        upsert: true,
+      },
+    ))
+  .then((result) => result.result.ok);
+
 const createAdmin = async (name, password, email, role) => {
-  const existingUser = await existingEmail(email);
+  const userToUpdate = await updateUser(name, password, email, role);
 
-  if (existingUser) return updateUser(name, password, email, role);
+  if (userToUpdate === 1) {
+    const { _id } = await existingEmail(email);
+    return ({
+      name, email, role, userId: _id,
+    });
+  }
 
-  return createUser(name, password, email, role);
+  return false;
 };
 
 module.exports = {

@@ -22,9 +22,7 @@ const existingEmail = async (email) => {
   const exists = await connection()
     .then((db) => db.collection(coll).findOne({ email }));
 
-  if (exists) return false;
-
-  return true;
+  return exists;
 };
 
 const checkLogin = async (email, password) => {
@@ -38,8 +36,20 @@ const checkLogin = async (email, password) => {
   return { name, email, id: _id };
 };
 
+const findAllUsers = async () => {
+  const allUsers = await connection()
+    .then((db) => db.collection(coll).find().toArray());
+
+  return allUsers.map((user) => {
+    const { password: _, ...userWithoutPassword } = user;
+    const { name, email, _id } = userWithoutPassword;
+    return { name, email, id: _id };
+  });
+};
+
 module.exports = {
   createUser,
   existingEmail,
   checkLogin,
+  findAllUsers,
 };

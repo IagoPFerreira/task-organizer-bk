@@ -20,7 +20,14 @@ const login = async (req, res) => {
   return res.status(status).json({ data });
 };
 
+const findAllUsers = async (_req, res) => {
+  const { status, data } = await service.findAllUsers();
+
+  return res.status(status).json({ data });
+};
+
 module.exports = {
   createUser,
   login,
+  findAllUsers,
 };

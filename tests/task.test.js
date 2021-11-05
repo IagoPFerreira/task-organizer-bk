@@ -7,7 +7,7 @@ const mock = require('./connectionMock');
 
 chai.use(chaiHttp);
 
-const server = require('../api/app/app');
+const server = require('../index');
 const { NO_REGISTRED_TASKS, TASK_NOT_FOUND, INVALID_ENTRIES } = require('../messages/errorMessages');
 
 let currentId;

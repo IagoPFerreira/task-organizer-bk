@@ -5,8 +5,8 @@ const DBServer = new MongoMemoryServer();
 const OPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const mock = async () => {
-const URLMock = await DBServer.getUri();
-return MongoClient.connect(URLMock, OPTIONS);
+  const URLMock = await DBServer.getUri();
+  return MongoClient.connect(URLMock, OPTIONS);
 };
 
-module.exports =  mock; 
+module.exports = mock;

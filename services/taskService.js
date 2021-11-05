@@ -1,7 +1,7 @@
 const model = require('../models/taskModel');
 const {
   NO_REGISTRED_TASKS, TASK_NOT_FOUND, INVALID_ENTRIES, SERVER_ERROR,
-} = require('../../messages/errorMessages');
+} = require('../messages/errorMessages');
 
 const getAllTasks = async () => {
   const tasks = await model.getAllTasks();

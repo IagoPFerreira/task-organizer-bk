@@ -7,7 +7,7 @@ const mock = require('./connectionMock');
 
 chai.use(chaiHttp);
 
-const server = require('../api/app/app');
+const server = require('../index');
 const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED } = require('../messages/errorMessages');
 
 describe('POST /users', () => {

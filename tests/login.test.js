@@ -7,7 +7,7 @@ const mock = require('./connectionMock');
 
 chai.use(chaiHttp);
 
-const server = require('../api/app/app');
+const server = require('../index');
 const { ALL_FILDES_FILLED, INCORRECT_USERNAME_OR_PASSWORD } = require('../messages/errorMessages');
 
 describe('POST /login', () => {

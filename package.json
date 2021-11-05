@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./api/app/app.js",
-    "dev": "nodemon ./api/app/app.js",
-    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
+    "start": "node ./api/index.js",
+    "dev": "nodemon ./api/index.js",
+    "test": "mocha ./api/tests/**/*$NAME*.{test,spec}.js --exit",
     "test:watch": "mocha ./tests/**/*$NAME*.{test,spec}.js --watch --recursive --exit"
   },
   "keywords": [],
@@ -20,7 +20,7 @@
     "express-rescue": "^1.1.26",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "8.5.1",
-    "mongodb": "^3.5.9"
+    "mongodb": "^3.5.9"  
   },
   "devDependencies": {
     "chai": "^4.3.4",

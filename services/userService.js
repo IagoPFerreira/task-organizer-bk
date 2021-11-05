@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const model = require('../models/userModel');
 const {
   EMAIL_ALREADY_REGISTRED, INVALID_ENTRIES, ALL_FILDES_FILLED, INCORRECT_USERNAME_OR_PASSWORD,
-} = require('../../messages/errorMessages');
+} = require('../messages/errorMessages');
 
 require('dotenv').config();
 

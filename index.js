@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const taskController = require('../controllers/taskController');
-const userController = require('../controllers/userController');
-const { validateToken } = require('../auth/validateToken');
+const taskController = require('./controllers/taskController');
+const userController = require('./controllers/userController');
+const { validateToken } = require('./auth/validateToken');
 
 const app = express();
 

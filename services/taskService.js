@@ -39,7 +39,7 @@ const updateTask = async (id, {
   }
 
   const task = await model.updateTask(id, {
-    name, status, id, date,
+    name, status, date,
   });
 
   if (!task) return ({ status: 404, data: TASK_NOT_FOUND });

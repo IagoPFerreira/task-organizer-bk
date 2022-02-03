@@ -9,7 +9,7 @@ const {
 require('dotenv').config();
 
 const jwtConfig = {
-  expiresIn: '15m',
+  expiresIn: '2h',
   algorithm: 'HS256',
 };
 
@@ -68,13 +68,15 @@ const findAllUsers = async () => {
 };
 
 const createAdmin = async ({
-  name, password, email, role: newAdminRole,
-}, { role: adminRole }) => {
+  name, password, email, role,
+}, user) => {
+  const { role: adminRole } = await model.existingEmail(user.email);
+
   if (adminRole !== 'admin') {
     return ({ status: 403, data: ONLY_ADMINS_REGISTER });
   }
 
-  const newAdmin = await model.createAdmin(name, password, email, newAdminRole);
+  const newAdmin = await model.createAdmin(name, password, email, role);
 
   if (!newAdmin) return ({ status: 501, data: SERVER_ERROR });
 

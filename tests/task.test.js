@@ -1,4 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const chai = require('chai');
+
 const { expect } = chai;
 const chaiHttp = require('chai-http');
 const sinon = require('sinon');
@@ -38,7 +42,7 @@ describe('GET /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -78,11 +82,11 @@ describe('GET /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${NO_REGISTRED_TASKS}"`, () => {
         expect(response.body.data).to.be.equal(
-          NO_REGISTRED_TASKS
+          NO_REGISTRED_TASKS,
         );
       });
     });
-  });  
+  });
 
   describe('Casos de sucesso', () => {
     let token;
@@ -97,7 +101,7 @@ describe('GET /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -119,19 +123,19 @@ describe('GET /tasks', () => {
 
       before(async () => {
         const { body: { data: { _id } } } = await chai
-        .request(server)
-        .post('/tasks')
-        .set({ authorization: token })
-        .send({
-          name: 'Criar os testes da rota "/tasks"',
-          status: 'Em andamento /get',
-          date: '03/11/2021',
-        });
+          .request(server)
+          .post('/tasks')
+          .set({ authorization: token })
+          .send({
+            name: 'Criar os testes da rota "/tasks"',
+            status: 'Em andamento /get',
+            date: '03/11/2021',
+          });
 
         response = await chai
-        .request(server)
-        .get('/tasks')
-        .set({ authorization: token });
+          .request(server)
+          .get('/tasks')
+          .set({ authorization: token });
       });
 
       after(async () => {
@@ -191,7 +195,7 @@ describe('GET /tasks/:id', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -236,11 +240,11 @@ describe('GET /tasks/:id', () => {
 
       it(`a propriedade "data" possui o texto "${TASK_NOT_FOUND}"`, () => {
         expect(response.body.data).to.be.equal(
-          TASK_NOT_FOUND
+          TASK_NOT_FOUND,
         );
       });
     });
-  });  
+  });
 
   describe('Casos de sucesso', () => {
     let token;
@@ -253,7 +257,7 @@ describe('GET /tasks/:id', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -274,15 +278,15 @@ describe('GET /tasks/:id', () => {
       let response = {};
 
       before(async () => {
-        const {body: { data: { _id } } } = await chai
+        const { body: { data: { _id } } } = await chai
           .request(server)
           .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tasks"',
-          status: 'Em andamento',
-          date: '03/11/2021',
-        });
+            name: 'Criar os testes da rota "/tasks"',
+            status: 'Em andamento',
+            date: '03/11/2021',
+          });
 
         currentId = _id;
 
@@ -350,7 +354,7 @@ describe('POST /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -375,8 +379,8 @@ describe('POST /tasks', () => {
           .post('/tasks')
           .set({ authorization: token })
           .send({
-          status: 'Em andamento',
-        });
+            status: 'Em andamento',
+          });
       });
 
       it('retorna o código de status 400', () => {
@@ -393,7 +397,7 @@ describe('POST /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          INVALID_ENTRIES
+          INVALID_ENTRIES,
         );
       });
     });
@@ -407,8 +411,8 @@ describe('POST /tasks', () => {
           .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tasks"',
-        });
+            name: 'Criar os testes da rota "/tasks"',
+          });
       });
 
       it('retorna o código de status 400', () => {
@@ -425,7 +429,7 @@ describe('POST /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          INVALID_ENTRIES
+          INVALID_ENTRIES,
         );
       });
     });
@@ -442,7 +446,7 @@ describe('POST /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -468,12 +472,12 @@ describe('POST /tasks', () => {
           .post('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tasks"',
-          status: 'Em andamento',
-          date: '03/11/2021',
-        });
+            name: 'Criar os testes da rota "/tasks"',
+            status: 'Em andamento',
+            date: '03/11/2021',
+          });
 
-        currentId = response.body.data['_id'];
+        currentId = response.body.data._id;
       });
 
       after(async () => {
@@ -535,7 +539,7 @@ describe('PUT /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -551,10 +555,10 @@ describe('PUT /tasks', () => {
         .post('/tasks')
         .set({ authorization: token })
         .send({
-        name: 'Criar os testes da rota "/tasks"',
-        status: 'Pendente',
-        date: '03/11/2021',
-      });
+          name: 'Criar os testes da rota "/tasks"',
+          status: 'Pendente',
+          date: '03/11/2021',
+        });
     });
 
     after(async () => {
@@ -571,10 +575,10 @@ describe('PUT /tasks', () => {
           .put('/tasks')
           .set({ authorization: token })
           .send({
-          status: 'Pendente',
-          date: '03/11/2021',
-          _id,
-        });
+            status: 'Pendente',
+            date: '03/11/2021',
+            _id,
+          });
       });
 
       it('retorna o código de status 400', () => {
@@ -591,7 +595,7 @@ describe('PUT /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          INVALID_ENTRIES
+          INVALID_ENTRIES,
         );
       });
     });
@@ -606,10 +610,10 @@ describe('PUT /tasks', () => {
           .put('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tasks"',
-          date: '03/11/2021',
-          _id,
-        });
+            name: 'Criar os testes da rota "/tasks"',
+            date: '03/11/2021',
+            _id,
+          });
       });
 
       it('retorna o código de status 400', () => {
@@ -626,7 +630,7 @@ describe('PUT /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          INVALID_ENTRIES
+          INVALID_ENTRIES,
         );
       });
     });
@@ -640,10 +644,10 @@ describe('PUT /tasks', () => {
           .put('/tasks')
           .set({ authorization: token })
           .send({
-          name: 'Criar os testes da rota "/tasks"',
-          status: 'Pendente',
-          date: '03/11/2021',
-        });
+            name: 'Criar os testes da rota "/tasks"',
+            status: 'Pendente',
+            date: '03/11/2021',
+          });
       });
 
       it('retorna o código de status 400', () => {
@@ -660,7 +664,7 @@ describe('PUT /tasks', () => {
 
       it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
         expect(response.body.data).to.be.equal(
-          INVALID_ENTRIES
+          INVALID_ENTRIES,
         );
       });
     });
@@ -680,7 +684,7 @@ describe('PUT /tasks', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -699,9 +703,9 @@ describe('PUT /tasks', () => {
           name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
-      });
-      
-      currentId = task.body.data['_id']
+        });
+
+      currentId = task.body.data._id;
     });
 
     after(async () => {
@@ -721,7 +725,7 @@ describe('PUT /tasks', () => {
             name: 'Criar os testes da rota "/tasks"',
             status: 'Concluída',
             _id: currentId,
-        });
+          });
       });
 
       it('retorna o código de status 200', () => {
@@ -773,7 +777,7 @@ describe('DELETE /tasks/:id', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -792,7 +796,7 @@ describe('DELETE /tasks/:id', () => {
           name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
-      });
+        });
     });
 
     after(async () => {
@@ -809,8 +813,7 @@ describe('DELETE /tasks/:id', () => {
           .delete('/tasks/618310ab635c3b7aac2e07fa')
           .set({ authorization: token });
       });
-      
-      
+
       it('retorna o código de status 404', () => {
         expect(response).to.have.status(404);
       });
@@ -825,11 +828,11 @@ describe('DELETE /tasks/:id', () => {
 
       it(`a propriedade "data" possui o texto "${TASK_NOT_FOUND}"`, () => {
         expect(response.body.data).to.be.equal(
-          TASK_NOT_FOUND
+          TASK_NOT_FOUND,
         );
       });
     });
-  });  
+  });
 
   describe('Casos de sucesso', () => {
     let token;
@@ -862,9 +865,9 @@ describe('DELETE /tasks/:id', () => {
           name: 'Criar os testes da rota "/tasks"',
           status: 'Pendente',
           date: '03/11/2021',
-      });
-      
-      currentId = task.body.data['_id']
+        });
+
+      currentId = task.body.data._id;
     });
 
     after(async () => {

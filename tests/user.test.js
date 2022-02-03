@@ -1,4 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+
 const chai = require('chai');
+
 const { expect } = chai;
 const chaiHttp = require('chai-http');
 const sinon = require('sinon');
@@ -37,7 +41,7 @@ describe('GET /users', () => {
           name: 'Yarpen Zigrin',
           email: 'yarpenzigrin@anao.com',
           password: '123456789',
-      });
+        });
 
       token = await chai
         .request(server)
@@ -58,9 +62,9 @@ describe('GET /users', () => {
 
       before(async () => {
         response = await chai
-        .request(server)
-        .get('/users')
-        .set({ authorization: token });
+          .request(server)
+          .get('/users')
+          .set({ authorization: token });
       });
 
       after(async () => {
@@ -92,12 +96,12 @@ describe('GET /users', () => {
       it('a propriedade "data" ter as informações do usuário', () => {
         expect(response.body.data[0].name).to.be.equal('Yarpen Zigrin');
         expect(response.body.data[0].email).to.be.equal(
-          'yarpenzigrin@anao.com'
+          'yarpenzigrin@anao.com',
         );
       });
     });
   });
-})
+});
 
 describe('POST /users', () => {
   let db;
@@ -299,7 +303,7 @@ describe('POST /users', () => {
       it('a propriedade "data" ter as informações do usuário', () => {
         expect(response.body.data.name).to.be.equal('Yarpen Zigrin');
         expect(response.body.data.email).to.be.equal(
-          'yarpenzigrin@anao.com'
+          'yarpenzigrin@anao.com',
         );
         expect(response.body.data).to.have.property('userId');
       });

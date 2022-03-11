@@ -12,7 +12,7 @@ const getAllTasks = async () => {
 };
 
 const getTasksByUserId = async (userId) => {
-  const tasks = await connection().then((db) => db.collection(coll).find({ userId })).toArray();
+  const tasks = await connection().then((db) => db.collection(coll).find({ userId }).toArray());
 
   if (tasks.length === 0) return null;
 

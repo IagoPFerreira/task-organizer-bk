@@ -1,7 +1,6 @@
+/* eslint-disable object-curly-newline */
 const model = require('../models/taskModel');
-const {
-  TASK_NOT_FOUND, INVALID_ENTRIES,
-} = require('../messages/errorMessages');
+const { INVALID_ENTRIES } = require('../messages/errorMessages');
 
 const getAllTasks = async ({ role, userId }) => {
   const tasks = role === 'admin' ? await model.getAllTasks() : await model.getTasksByUserId(userId);
@@ -29,12 +28,12 @@ const insertTask = async ({ name, status }, { userId }) => {
   return (task);
 };
 
-const updateTask = async (id, { name, status, date }) => {
-  if (!name || !status || !id) return ({ message: INVALID_ENTRIES });
+const updateTask = async ({ _id: taskId, name, status, date }, { userId }) => {
+  if (!name || !status || !taskId) return ({ message: INVALID_ENTRIES });
 
-  const task = await model.updateTask(id, { name, status, date });
+  const task = await model.updateTask(taskId, { name, status, date }, userId);
 
-  if (!task) return ({ status: 404, data: TASK_NOT_FOUND });
+  if (!task) return false;
 
   return (task);
 };

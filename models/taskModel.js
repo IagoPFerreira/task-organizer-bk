@@ -50,13 +50,13 @@ const updateTask = async (taskId, body, userId) => {
 
   if (result.n === 0) return false;
 
-  const task = await getTaskById(taskId);
+  const task = await getTaskById(taskId, userId);
 
   return task;
 };
 
 const deleteTask = async (id, userId) => {
-  const taskToBeDeleted = await getTaskById(id);
+  const taskToBeDeleted = await getTaskById(id, userId);
 
   if (!taskToBeDeleted) return null;
 

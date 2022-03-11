@@ -19,10 +19,10 @@ const getTaskById = async (id) => {
   return ({ status: 200, data: task });
 };
 
-const insertTask = async ({ name, status }) => {
+const insertTask = async ({ name, status }, { userId }) => {
   if (!name || !status) return ({ status: 400, data: INVALID_ENTRIES });
 
-  const task = await model.insertTask(name, status);
+  const task = await model.insertTask(name, status, userId);
 
   if (!task) return ({ status: 500, data: SERVER_ERROR });
 

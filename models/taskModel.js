@@ -27,7 +27,7 @@ const getTaskById = async (id) => {
   return task;
 };
 
-const insertTask = async (name, status) => {
+const insertTask = async (name, status, userId) => {
   const date = new Date().toLocaleDateString('br');
 
   const task = await connection()
@@ -35,6 +35,7 @@ const insertTask = async (name, status) => {
       name,
       status,
       date,
+      userId,
     }))
     .then((result) => ({ ...result.ops[0] }));
 

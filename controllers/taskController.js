@@ -10,9 +10,9 @@ const getAllTasks = async (req, res, next) => {
 };
 
 const getTaskById = async (req, res, next) => {
-  const { id } = req.params;
+  const { params: { id }, user: { userId } } = req;
 
-  const task = await service.getTaskById(id);
+  const task = await service.getTaskById(id, userId);
 
   if (!task) {
     return next({ message: TASK_NOT_FOUND, code: 404 });

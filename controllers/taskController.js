@@ -1,39 +1,58 @@
 const service = require('../services/taskService');
+const { TASK_NOT_FOUND, NO_REGISTRED_TASKS, SERVER_ERROR } = require('../messages/errorMessages');
 
-const getAllTasks = async (req, res) => {
-  const { status, data } = await service.getAllTasks(req.user);
+const getAllTasks = async (req, res, next) => {
+  const tasks = await service.getAllTasks(req.user);
 
-  return res.status(status).json({ data });
+  if (!tasks) return next({ message: NO_REGISTRED_TASKS, code: 404 });
+
+  return res.status(200).json({ data: tasks });
 };
 
-const getTaskById = async (req, res) => {
+const getTaskById = async (req, res, next) => {
   const { id } = req.params;
 
-  const { status, data } = await service.getTaskById(id);
+  const task = await service.getTaskById(id);
 
-  return res.status(status).json({ data });
+  if (!task) {
+    return next({ message: TASK_NOT_FOUND, code: 404 });
+  }
+
+  return res.status(200).json({ data: task });
 };
 
-const insertTask = async (req, res) => {
-  const { status, data } = await service.insertTask(req.body, req.user);
+const insertTask = async (req, res, next) => {
+  const task = await service.insertTask(req.body, req.user);
 
-  return res.status(status).json({ data });
+  if (task.message) return next({ message: task.message, code: 400 });
+
+  if (!task) return next({ message: SERVER_ERROR, code: 500 });
+
+  return res.status(201).json({ data: task });
 };
 
-const updateTask = async (req, res) => {
+const updateTask = async (req, res, next) => {
   const { _id } = req.body;
 
-  const { status, data } = await service.updateTask(_id, req.body);
+  const task = await service.updateTask(_id, req.body);
 
-  return res.status(status).json({ data });
+  if (task.message) return next({ message: task.message, code: 400 });
+
+  if (!task) return next({ message: TASK_NOT_FOUND, code: 404 });
+
+  return res.status(200).json({ data: task });
 };
 
-const deleteTask = async (req, res) => {
+const deleteTask = async (req, res, next) => {
   const { id } = req.params;
 
-  const { status, data } = await service.deleteTask(id);
+  const task = await service.deleteTask(id);
 
-  return res.status(status).json({ data });
+  if (task.message) return next({ message: task.message, code: 400 });
+
+  if (!task) return next({ message: TASK_NOT_FOUND, code: 404 });
+
+  return res.status(204).json({ data: '' });
 };
 
 module.exports = {

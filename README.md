@@ -11,8 +11,20 @@ Esse projeto foi desenvolvido como projeto bônus no módulo de Backend, no curs
 # Sumário
 
 - [Boas vindas ao repositório do projeto Task Organizer!](#boas-vindas-ao-repositório-do-projeto-task-organizer)
+- [Desenvolvimento](#Desenvolvimento)
 - [Estrutura de diretórios e arquivos](#Estrutura-de-diretórios-e-arquivos)
 - [Instalação do projeto localmente](#Instalação-do-projeto-localmente)
+- [Utilizando as rotas](#Utilizando-as-rotas)
+  - [POST /users](#POST-/users)
+  - [POST /login](#POST-/login)
+  - [GET /users](#GET-/users)
+  - [POST /users/admin](#POST-/users/admin)
+  - [POST /tasks](#POST-/tasks)
+  - [GET /tasks](#GET-/tasks)
+  - [PUT /tasks](#PUT-/tasks)
+  - [GET tasks/:id](#GET-tasks/:id)
+  - [DELETE tasks/:id](#DELETE-tasks/:id)
+- [Link para o portfolio](#Link-para-o-portfolio)
 
 ---
 
@@ -53,6 +65,8 @@ Esse projeto foi desenvolvido como projeto bônus no módulo de Backend, no curs
 └── README.md
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ## Desenvolvimento
@@ -64,6 +78,10 @@ Através dessa aplicação, é possível realizar as operações básicas que se
 Para realizar qualquer tipo de alteração no banco de dados (como cadastro, edição ou exclusão de tarefas) será necessário autenticar-se.
 
 A autenticação é feita via `JWT`.
+
+[Voltar ao sumário](#Sumário)
+
+---
 
 ## Instalação do projeto localmente
 
@@ -84,13 +102,13 @@ cd projetos-iago
 Passo 3. Clone o projeto:
 
 ~~~bash
-git clone git@github.com:IagoPFerreira/task-organizer.git
+git clone git@github.com:IagoPFerreira/task-organizer-bk.git
 ~~~
 
 Passo 4. Após terminado a clonagem, entre no diretório que você acabou de clonar:
 
 ~~~bash
-cd task-organizer
+cd task-organizer-bk
 ~~~
 
 Passo 5. Instale todas as dependências do projeto:
@@ -113,6 +131,8 @@ A aplicação começará a rodar e no seu terminal deve aparecer as seguintes me
 
 Essa aplicação foi desenvolvida utilizando MongoDB, é necessário para o funcionamento correto desse projeto que o MongoDB esteja instalado na sua máquina, caso você não o tenha instalado, você pode seguir o passo a passo da [documentação do MongoDB para a instalação](https://docs.mongodb.com/manual/installation/).
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ## Utilizando as rotas
@@ -122,6 +142,8 @@ Localmente todas as rotas irão rodar na porta 8080, dito isso, no local onde vo
 Voce pode usar as ferramentas [Postman](https://www.postman.com/), [Insomnia](https://insomnia.rest/), [Thunder Client](https://www.thunderclient.com/), dentre outras para fazer as requisições.
 
 Caso haja algum erro nas requisições por falta de informação passada no corpo da requisição, ou informação passada da forma errada, as requisições irão retornar mensagens de erro descritivas de cada erro.
+
+[Voltar ao sumário](#Sumário)
 
 ---
 
@@ -153,6 +175,8 @@ E o retorno dessa requisição será:
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### POST /login
@@ -179,6 +203,8 @@ E o retorno dessa requisição será:
 ~~~
 
 Este token será o token de autenticação de que deverá ser passado para outras requisições
+
+[Voltar ao sumário](#Sumário)
 
 ---
 
@@ -219,6 +245,8 @@ E o retorno dessa requisição será um array das pessoas usuárias cadastradas:
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### POST /users/admin
@@ -257,6 +285,8 @@ E o retorno dessa requisição será:
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### POST /tasks
@@ -290,6 +320,8 @@ E o retorno dessa requisição será:
   }
 }
 ~~~
+
+[Voltar ao sumário](#Sumário)
 
 ---
 
@@ -330,6 +362,8 @@ E o retorno dessa requisição será um array das tarefas cadastradas, o estado 
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### PUT /tasks
@@ -366,6 +400,8 @@ E o retorno dessa requisição será:
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### GET tasks/:id
@@ -393,6 +429,8 @@ E o retorno dessa requisição será da tarefa:
 }
 ~~~
 
+[Voltar ao sumário](#Sumário)
+
 ---
 
 ### DELETE tasks/:id
@@ -404,6 +442,8 @@ http://localhost:8080/tasks/61fab004f2a5298b06477e84
 Esta é uma rota de deleção de uma tarefa cadastrada específica no banco de dados, essa rota não espera nada no corpo da requisição, mas espera o `_id` de uma tarefa específica, como parâmetro de rota.
 
 E o retorno dessa requisição será um objeto vazio.
+
+[Voltar ao sumário](#Sumário)
 
 ---
 

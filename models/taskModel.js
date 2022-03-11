@@ -11,6 +11,14 @@ const getAllTasks = async () => {
   return tasks;
 };
 
+const getTasksByUserId = async (userId) => {
+  const tasks = await connection().then((db) => db.collection(coll).find({ userId }).toArray());
+
+  if (tasks.length === 0) return null;
+
+  return tasks;
+};
+
 const getTaskById = async (id) => {
   const task = await connection().then((db) => db.collection(coll).findOne({ _id: ObjectId(id) }));
 
@@ -19,7 +27,7 @@ const getTaskById = async (id) => {
   return task;
 };
 
-const insertTask = async (name, status) => {
+const insertTask = async (name, status, userId) => {
   const date = new Date().toLocaleDateString('br');
 
   const task = await connection()
@@ -27,6 +35,7 @@ const insertTask = async (name, status) => {
       name,
       status,
       date,
+      userId,
     }))
     .then((result) => ({ ...result.ops[0] }));
 
@@ -59,6 +68,7 @@ const deleteTask = async (id) => {
 
 module.exports = {
   getAllTasks,
+  getTasksByUserId,
   getTaskById,
   insertTask,
   updateTask,

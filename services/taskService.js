@@ -3,8 +3,8 @@ const {
   NO_REGISTRED_TASKS, TASK_NOT_FOUND, INVALID_ENTRIES, SERVER_ERROR,
 } = require('../messages/errorMessages');
 
-const getAllTasks = async () => {
-  const tasks = await model.getAllTasks();
+const getAllTasks = async ({ role, userId }) => {
+  const tasks = role === 'admin' ? await model.getAllTasks() : await model.getTasksByUserId(userId);
 
   if (!tasks) return ({ status: 404, data: NO_REGISTRED_TASKS });
 
@@ -19,28 +19,24 @@ const getTaskById = async (id) => {
   return ({ status: 200, data: task });
 };
 
-const insertTask = async ({ name, status }) => {
+const insertTask = async ({ name, status }, { userId }) => {
   if (!name || !status) return ({ status: 400, data: INVALID_ENTRIES });
 
-  const task = await model.insertTask(name, status);
+  const task = await model.insertTask(name, status, userId);
 
   if (!task) return ({ status: 500, data: SERVER_ERROR });
 
   return ({ status: 201, data: task });
 };
 
-const updateTask = async (id, {
-  name, status, date,
-}) => {
+const updateTask = async (id, { name, status, date }) => {
   if (!name || !status || !id) {
     return (
       { status: 400, data: INVALID_ENTRIES }
     );
   }
 
-  const task = await model.updateTask(id, {
-    name, status, date,
-  });
+  const task = await model.updateTask(id, { name, status, date });
 
   if (!task) return ({ status: 404, data: TASK_NOT_FOUND });
 

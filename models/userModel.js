@@ -32,8 +32,10 @@ const checkLogin = async (email, password) => {
 
   if (!checkingUser) return null;
 
-  const { name, _id } = checkingUser;
-  return ({ name, email, userId: _id });
+  const { name, _id, role } = checkingUser;
+  return ({
+    name, email, role, userId: _id,
+  });
 };
 
 const findAllUsers = async () => {

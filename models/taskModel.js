@@ -11,6 +11,14 @@ const getAllTasks = async () => {
   return tasks;
 };
 
+const getTasksByUserId = async (userId) => {
+  const tasks = await connection().then((db) => db.collection(coll).find({ userId })).toArray();
+
+  if (tasks.length === 0) return null;
+
+  return tasks;
+};
+
 const getTaskById = async (id) => {
   const task = await connection().then((db) => db.collection(coll).findOne({ _id: ObjectId(id) }));
 
@@ -59,6 +67,7 @@ const deleteTask = async (id) => {
 
 module.exports = {
   getAllTasks,
+  getTasksByUserId,
   getTaskById,
   insertTask,
   updateTask,

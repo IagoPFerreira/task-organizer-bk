@@ -70,6 +70,10 @@ const findAllUsers = async () => {
 const createAdmin = async ({
   name, password, email, role,
 }, user) => {
+  const infoCheck = checkInfo(name, password, email);
+
+  if (infoCheck) return infoCheck;
+
   const { role: adminRole } = await model.existingEmail(user.email);
 
   if (adminRole !== 'admin') {

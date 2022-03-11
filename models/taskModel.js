@@ -54,13 +54,13 @@ const updateTask = async (taskId, body, userId) => {
   return task;
 };
 
-const deleteTask = async (id) => {
+const deleteTask = async (id, userId) => {
   const taskToBeDeleted = await getTaskById(id);
 
   if (!taskToBeDeleted) return null;
 
   await connection()
-    .then((db) => db.collection(coll).deleteOne({ _id: ObjectId(id) }));
+    .then((db) => db.collection(coll).deleteOne({ _id: ObjectId(id), userId }));
 
   const deletedTask = await getTaskById(id);
 

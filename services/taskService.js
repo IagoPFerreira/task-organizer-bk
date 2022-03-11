@@ -10,8 +10,8 @@ const getAllTasks = async ({ role, userId }) => {
   return tasks;
 };
 
-const getTaskById = async (id) => {
-  const task = await model.getTaskById(id);
+const getTaskById = async (taskId, userId) => {
+  const task = await model.getTaskById(taskId, userId);
 
   if (!task) return false;
 

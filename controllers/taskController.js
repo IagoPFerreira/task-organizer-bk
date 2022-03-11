@@ -32,9 +32,7 @@ const insertTask = async (req, res, next) => {
 };
 
 const updateTask = async (req, res, next) => {
-  const { _id } = req.body;
-
-  const task = await service.updateTask(_id, req.body);
+  const task = await service.updateTask(req.body, req.user);
 
   if (task.message) return next({ message: task.message, code: 400 });
 

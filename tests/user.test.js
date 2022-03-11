@@ -12,7 +12,7 @@ const mock = require('./connectionMock');
 chai.use(chaiHttp);
 
 const server = require('../index');
-const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED, NO_REGISTRED_USERS, ONLY_ADMINS_REGISTER } = require('../messages/errorMessages');
+const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED, ONLY_ADMINS_REGISTER } = require('../messages/errorMessages');
 
 describe('GET /users', () => {
   let db;
@@ -541,5 +541,77 @@ describe('POST /users/admin', () => {
     });
   });
 
-  describe('Casos de sucesso', () => {});
+  describe('Casos de sucesso', () => {
+    describe('Quando é possivel cadastrar um usuário', () => {
+      let response;
+
+      before(async () => {
+        await db.collection('users').deleteMany({});
+
+        const user =
+          { name: 'Yarpen Zigrin', email: 'yarpenzigrin@anao.com', password: '123456789', role: 'admin' };
+        await db.collection('users').insertOne(user);
+        
+        token = await chai
+          .request(server)
+          .post('/login')
+          .send({
+            name: 'Yarpen Zigrin',
+            email: 'yarpenzigrin@anao.com',
+            password: '123456789',
+          })
+          .then(({ body }) => body.token);
+
+        response = await chai
+          .request(server)
+          .post('/users/admin')
+          .set({ authorization: token })
+          .send({
+            name: 'Yarpen Zigrin Jr',
+            email: 'yarpenzigrinjr@anao.com',
+            password: '123456789',
+          });
+      });
+
+      after(async () => {
+        db.collection('users').deleteMany({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789'
+        });
+        
+        db.collection('users').deleteMany({
+          name: 'Yarpen Zigrin Jr',
+          email: 'yarpenzigrinjr@anao.com',
+          password: '123456789'
+        });
+
+        db.collection('users').drop();
+      });
+
+      it('retorna o código de status 201', () => {
+        expect(response).to.have.status(201);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it('a propriedade "data" é um objeto', () => {
+        expect(response.body.data).to.be.a('object');
+      });
+
+      it('a propriedade "data" ter as informações do usuário', () => {
+        expect(response.body.data.name).to.be.equal('Yarpen Zigrin Jr');
+        expect(response.body.data.email).to.be.equal(
+          'yarpenzigrinjr@anao.com',
+        );
+        expect(response.body.data).to.have.property('userId');
+      });
+    });
+  });
 });

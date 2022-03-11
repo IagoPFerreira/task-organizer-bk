@@ -42,11 +42,14 @@ const insertTask = async (name, status, userId) => {
   return task;
 };
 
-const updateTask = async (id, body) => {
-  await connection()
-    .then((db) => db.collection(coll).updateOne({ _id: ObjectId(id) }, { $set: { ...body } }));
+const updateTask = async (taskId, body, userId) => {
+  const { result } = await connection()
+    .then((db) => db.collection(coll)
+      .updateOne({ _id: ObjectId(taskId), userId }, { $set: { ...body } }));
 
-  const task = await getTaskById(id);
+  if (result.n === 0) return false;
+
+  const task = await getTaskById(taskId);
 
   return task;
 };

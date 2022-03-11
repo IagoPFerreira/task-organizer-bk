@@ -42,9 +42,9 @@ const updateTask = async (req, res, next) => {
 };
 
 const deleteTask = async (req, res, next) => {
-  const { id } = req.params;
+  const { params: { id }, user: { userId } } = req;
 
-  const task = await service.deleteTask(id);
+  const task = await service.deleteTask(id, userId);
 
   if (task.message) return next({ message: task.message, code: 400 });
 

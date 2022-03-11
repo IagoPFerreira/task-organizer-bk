@@ -19,8 +19,9 @@ const getTasksByUserId = async (userId) => {
   return tasks;
 };
 
-const getTaskById = async (id) => {
-  const task = await connection().then((db) => db.collection(coll).findOne({ _id: ObjectId(id) }));
+const getTaskById = async (taskId, userId) => {
+  const task = await connection().then((db) => db.collection(coll)
+    .findOne({ _id: ObjectId(taskId), userId }));
 
   if (!task) return null;
 

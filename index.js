@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const taskController = require('./controllers/taskController');
 const userController = require('./controllers/userController');
-const { validateToken } = require('./auth/validateToken');
+const { validateToken } = require('./middlewares/validateToken');
+const error = require('./middlewares/error');
 
 const app = express();
 
@@ -26,6 +28,8 @@ app.route('/users')
 app.post('/users/admin', validateToken, userController.createAdmin);
 
 app.post('/login', userController.login);
+
+app.use(error);
 
 const PORT = process.env.PORT || 8080;
 

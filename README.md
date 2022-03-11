@@ -84,13 +84,13 @@ cd projetos-iago
 Passo 3. Clone o projeto:
 
 ~~~bash
-git clone git@github.com:IagoPFerreira/task-organizer.git
+git clone git@github.com:IagoPFerreira/task-organizer-bk.git
 ~~~
 
 Passo 4. Após terminado a clonagem, entre no diretório que você acabou de clonar:
 
 ~~~bash
-cd task-organizer
+cd task-organizer-bk
 ~~~
 
 Passo 5. Instale todas as dependências do projeto:

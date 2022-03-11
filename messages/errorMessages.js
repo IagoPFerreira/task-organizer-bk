@@ -6,7 +6,7 @@ module.exports = {
   NO_REGISTRED_TASKS: 'There are no registered tasks.',
   NO_REGISTRED_USERS: 'There are no registered users',
   NON_EXISTENTE_USER: 'Non-existent user.',
-  ONLY_ADMINS_REGISTER: 'Only admins can register new roles',
+  ONLY_ADMINS_REGISTER: 'Only admins can register new admins',
   SERVER_ERROR: 'Server error.',
   TASK_NOT_FOUND: 'Task not found.',
 };

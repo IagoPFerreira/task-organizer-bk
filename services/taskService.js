@@ -38,10 +38,10 @@ const updateTask = async ({ _id: taskId, name, status, date }, { userId }) => {
   return (task);
 };
 
-const deleteTask = async (id) => {
-  if (!id) return ({ message: INVALID_ENTRIES });
+const deleteTask = async (taskId, userId) => {
+  if (!taskId) return ({ message: INVALID_ENTRIES });
 
-  const task = await model.deleteTask(id);
+  const task = await model.deleteTask(taskId, userId);
 
   if (!task) return false;
 

@@ -326,7 +326,220 @@ describe('POST /users/admin', () => {
     MongoClient.connect.restore();
   });
 
-  describe('Casos de falha', () => {});
+  describe('Casos de falha', () => {
+    let token;
+
+    before(async () => {
+      await db.collection('users').deleteMany({});
+      await db.collection('tasks').deleteMany({});
+      await chai
+        .request(server)
+        .post('/users')
+        .send({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        });
+
+      token = await chai
+        .request(server)
+        .post('/login')
+        .send({
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+        .then(({ body }) => body.token);
+    });
+
+    after(async () => {
+      db.collection('users').drop();
+      db.collection('tasks').drop();
+    });
+    describe('Quando não é passado o campo "name"', () => {
+      let response;
+
+      before(async () => {
+        response = await chai
+          .request(server)
+          .post('/users/admin')
+          .set({ authorization: token })
+          .send({
+            email: 'yarpenzigrinjr@anao.com',
+            password: '123456789',
+          });
+      });
+
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
+      });
+    });
+
+    describe('Quando não é passado o campo "email"', () => {
+      let response;
+
+      before(async () => {
+        response = await chai
+          .request(server)
+          .post('/users/admin')
+          .set({ authorization: token })
+          .send({
+            name: 'Yarpen Zigrin Jr',
+            password: '123456789',
+          });
+      });
+
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
+      });
+    });
+
+    describe('Quando não é passado um e-mail válido no campo "email"', () => {
+      let response;
+
+      before(async () => {
+        response = await chai
+        .request(server)
+        .post('/users/admin')
+        .set({ authorization: token })
+        .send({
+          name: 'Yarpen Zigrin Jr',
+          email: 'yarpenzigrinjr@',
+          password: '123456789',
+        });
+      });
+
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
+      });
+    });
+
+    describe('Quando não é passado o campo "password"', () => {
+      let response;
+
+      before(async () => {
+        response = await chai
+          .request(server)
+          .post('/users/admin')
+          .set({ authorization: token })
+          .send({
+            name: 'Yarpen Zigrin Jr',
+            email: 'yarpenzigrinjr@anao.com',
+          });
+      });
+
+      it('retorna o código de status 400', () => {
+        expect(response).to.have.status(400);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it(`a propriedade "data" possui o texto "${INVALID_ENTRIES}"`, () => {
+        expect(response.body.data).to.be.equal(INVALID_ENTRIES);
+      });
+    });
+
+    describe('Quando o "role", de quem está tentando criar um novo "admin", não é "admin"', () => {
+      let response;
+      let token;
+
+      before(async () => {
+        await chai
+          .request(server)
+          .post('/users/admin')
+          .send({
+            name: 'Yarpen Zigrin',
+            email: 'yarpenzigrin@anao.com',
+            password: '123456789',
+          });
+  
+        token = await chai
+          .request(server)
+          .post('/login')
+          .send({
+            name: 'Yarpen Zigrin',
+            email: 'yarpenzigrin@anao.com',
+            password: '123456789',
+          })
+          .then(({ body }) => body.token);
+
+          response = await chai
+            .request(server)
+            .post('/users/admin')
+            .set({ authorization: token })
+            .send({
+              name: 'Yarpen Zigrin Jr',
+              email: 'yarpenzigrinjr@anao.com',
+              password: '123456789',
+            });
+      });
+
+      after(async () => {
+        db.collection('users').deleteMany({
+          name: 'Yarpen Zigrin',
+          email: 'yarpenzigrin@anao.com',
+          password: '123456789',
+        })
+      })
+
+      it('retorna o código de status 403', () => {
+        expect(response).to.have.status(403);
+      });
+
+      it('retorna um objeto', () => {
+        expect(response).to.be.a('object');
+      });
+
+      it('o objeto possui a propriedade "data"', () => {
+        expect(response.body).to.have.property('data');
+      });
+
+      it(`a propriedade "data" possui o texto "${ONLY_ADMINS_REGISTER}"`, () => {
+        expect(response.body.data).to.be.equal(ONLY_ADMINS_REGISTER);
+      });
+    });
+  });
 
   describe('Casos de sucesso', () => {});
 });

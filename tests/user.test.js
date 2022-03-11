@@ -12,7 +12,7 @@ const mock = require('./connectionMock');
 chai.use(chaiHttp);
 
 const server = require('../index');
-const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED, NO_REGISTRED_USERS } = require('../messages/errorMessages');
+const { INVALID_ENTRIES, EMAIL_ALREADY_REGISTRED, NO_REGISTRED_USERS, ONLY_ADMINS_REGISTER } = require('../messages/errorMessages');
 
 describe('GET /users', () => {
   let db;
@@ -309,4 +309,24 @@ describe('POST /users', () => {
       });
     });
   });
+});
+
+describe('POST /users/admin', () => {
+  let db;
+
+  before(async () => {
+    const connectionMock = await mock();
+
+    db = connectionMock.db('TaskOrganizer');
+
+    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+  });
+
+  after(async () => {
+    MongoClient.connect.restore();
+  });
+
+  describe('Casos de falha', () => {});
+
+  describe('Casos de sucesso', () => {});
 });

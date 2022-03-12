@@ -1,4 +1,4 @@
-const { INVALID_ENTRIES, ONLY_ADMINS_REGISTER } = require('../messages/errorMessages');
+const { INVALID_ENTRIES, SERVER_ERROR, ONLY_ADMINS_REGISTER } = require('../messages/errorMessages');
 const service = require('../services/userService');
 
 const createUser = async (req, res, next) => {
@@ -40,7 +40,21 @@ const createAdmin = async (req, res, next) => {
   const newAdmin = await service.createAdmin(body, user);
 
   if (newAdmin.message) {
-    const code = user.message === ONLY_ADMINS_REGISTER ? 404 : 501;
+    let code;
+    switch (newAdmin.message) {
+      case SERVER_ERROR:
+        code = 501;
+        break;
+      case ONLY_ADMINS_REGISTER:
+        code = 403;
+        break;
+      case INVALID_ENTRIES:
+        code = 400;
+        break;
+      default:
+        code = 404;
+        break;
+    }
     return next({ message: newAdmin.message, code });
   }
 
